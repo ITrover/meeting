@@ -210,4 +210,29 @@
       needvolunteer = #{needvolunteer,jdbcType=INTEGER}
     where meetingid = #{meetingid,jdbcType=INTEGER}
   </update>
+
+    <!--分页-->
+    <select id="selectMeetings" resultType=" Meeting">
+        select *
+        from meeting
+        limit #{offset}, #{limit}
+    </select>
+    <!--查询一共的行数-->
+    <select id="selectMeetingRows">
+        select count(meetingid)
+        from meeting
+    </select>
+
+    <select id="selectMeetings" resultType=" Meeting">
+        select *
+        from meeting
+        where 1=1
+        <if test="orderMode=0">
+        </if>
+        <if test="orderMode=1">
+            and close_time &gt; #{date}
+        </if>
+        limit #{offset}, #{limit}
+    </select>
+
 </mapper>

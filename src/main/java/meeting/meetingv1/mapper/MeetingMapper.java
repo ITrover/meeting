@@ -77,5 +77,4 @@ public interface MeetingMapper {
      * */
     int selectMeetingRows();
 
-
 }
