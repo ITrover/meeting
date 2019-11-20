@@ -714,6 +714,66 @@ public class MeetingExample {
             addCriterion("needvolunteer not between", value1, value2, "needvolunteer");
             return (Criteria) this;
         }
+
+        public Criteria andTypeidIsNull() {
+            addCriterion("typeid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidIsNotNull() {
+            addCriterion("typeid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidEqualTo(Integer value) {
+            addCriterion("typeid =", value, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidNotEqualTo(Integer value) {
+            addCriterion("typeid <>", value, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidGreaterThan(Integer value) {
+            addCriterion("typeid >", value, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("typeid >=", value, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidLessThan(Integer value) {
+            addCriterion("typeid <", value, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidLessThanOrEqualTo(Integer value) {
+            addCriterion("typeid <=", value, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidIn(List<Integer> values) {
+            addCriterion("typeid in", values, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidNotIn(List<Integer> values) {
+            addCriterion("typeid not in", values, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidBetween(Integer value1, Integer value2) {
+            addCriterion("typeid between", value1, value2, "typeid");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeidNotBetween(Integer value1, Integer value2) {
+            addCriterion("typeid not between", value1, value2, "typeid");
+            return (Criteria) this;
+        }
     }
 
     /**
