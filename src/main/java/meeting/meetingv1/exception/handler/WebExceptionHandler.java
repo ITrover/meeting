@@ -3,6 +3,8 @@ package meeting.meetingv1.exception.handler;
 import meeting.meetingv1.exception.IncorrectCredentialsException;
 import meeting.meetingv1.exception.SignUpColumnException;
 import meeting.meetingv1.exception.UnknownAccountException;
+import com.aliyuncs.exceptions.ClientException;
+import meeting.meetingv1.exception.VerificationException;
 import meeting.meetingv1.util.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +41,26 @@ public class WebExceptionHandler {
         log.error("邮件发送失败", e);
         return ResultBean.error(-4, "邮件发送失败");
     }
+
+    @ExceptionHandler
+    public ResultBean smsException(ClientException e) {
+        log.error("短信发送失败", e);
+        // 发送邮件通知技术人员.
+        return ResultBean.error(-5, "短信发送失败");
+    }
+    @ExceptionHandler
+    public ResultBean verificationException(VerificationException e) {
+        log.error("验证码错误", e);
+        return ResultBean.error(-6, "验证码错误");
+    }
+
+
     @ExceptionHandler
     public ResultBean unknownException(Exception e) {
         log.error("发生了未知异常", e);
         // 发送邮件通知技术人员.
         return ResultBean.error(-99, "系统出现错误, 请联系网站管理员!");
     }
+
+
 }

@@ -1,9 +1,15 @@
 package meeting.meetingv1;
 
+import meeting.meetingv1.exception.UnknownAccountException;
 import meeting.meetingv1.mapper.UserMapper;
 import meeting.meetingv1.pojo.User;
+import meeting.meetingv1.service.UserService;
+import meeting.meetingv1.service.VerificationCodeService;
 import meeting.meetingv1.util.GenerateVerificationCode;
+import meeting.meetingv1.util.SendSmsUtil;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
@@ -80,6 +86,8 @@ class MettingV1ApplicationTests {
         request.putQueryParameter("RegionId", "cn-hangzhou");
         request.putQueryParameter("PhoneNumbers", "15086924104");
         request.putQueryParameter("TemplateCode", "SMS_177549030");
+        request.putQueryParameter("SignName", "会务管理系统");
+        request.putQueryParameter("TemplateParam", "{\"code\":\"23212\"}");
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());
@@ -88,5 +96,26 @@ class MettingV1ApplicationTests {
         } catch (ClientException e) {
             e.printStackTrace();
         }
+    }
+    @Autowired
+    VerificationCodeService verificationCodeService;
+    @Test
+    void verifiedTest() {
+        System.out.println(verificationCodeService.getVerificationCode("15086924104"));
+    }
+    @Autowired
+    SendSmsUtil sendSmsUtil;
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+    @Test
+    void verifiedTes2t() {
+//        System.out.println(sendSmsUtil.getAccessKeyId());
+        log.info("输出日志");
+        //rSystem.out.println(verificationCodeService.deleteCode("15086924104"));
+    }
+    @Autowired
+    UserService userService;
+    @Test
+    void userUpdate() throws UnknownAccountException {
+        userService.updatePwd("15086924104","密码");
     }
 }
