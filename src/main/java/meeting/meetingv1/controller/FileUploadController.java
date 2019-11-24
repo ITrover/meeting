@@ -29,7 +29,7 @@ public class FileUploadController {
     UserService userService;
 
     @UserLoginToken
-    @PostMapping("/upload")
+    @PostMapping("/uploadimg")
     public ResultBean upload(@RequestParam("img")MultipartFile uploadFile, HttpServletRequest request, String phone) {
         if (uploadFile == null){
             return ResultBean.error(-7,"未选择文件");
@@ -41,7 +41,7 @@ public class FileUploadController {
         String newName = UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."), originalFilename.length());
         File file = new File(folder, newName);
 
-        try {//60a83d363554.png
+        try {
             uploadFile.transferTo(file);
             String filePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + UPLOAD_PATH +"/" + newName;
             logger.info("文件访问路径："+filePath);

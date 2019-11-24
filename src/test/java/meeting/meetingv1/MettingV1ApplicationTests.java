@@ -2,7 +2,9 @@ package meeting.meetingv1;
 
 import meeting.meetingv1.exception.UnknownAccountException;
 import meeting.meetingv1.mapper.UserMapper;
+import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.pojo.User;
+import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.service.UserService;
 import meeting.meetingv1.service.VerificationCodeService;
 import meeting.meetingv1.util.GenerateVerificationCode;
@@ -117,5 +119,15 @@ class MettingV1ApplicationTests {
     @Test
     void userUpdate() throws UnknownAccountException {
         userService.updatePwd("15086924104","密码");
+    }
+    @Autowired
+    UserMeetingMapper userMeetingMapper;
+    @Test
+    void userMeeting() {
+        UserMeeting userMeeting = new UserMeeting();
+        userMeeting.setMeetingid(1);
+        userMeeting.setType(new Byte("1"));
+        userMeeting.setUserid(1);
+        userMeetingMapper.delete(userMeeting);
     }
 }
