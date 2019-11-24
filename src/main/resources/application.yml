@@ -29,6 +29,5 @@ spring:
 
 
 
-
 mybatis:
   mapper-locations: classpath:meeting/meetingv1/mapper/*Mapper.xml
