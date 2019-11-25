@@ -1,10 +1,12 @@
 package meeting.meetingv1;
 
+import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.exception.UnknownAccountException;
 import meeting.meetingv1.mapper.UserMapper;
 import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.pojo.UserMeeting;
+import meeting.meetingv1.service.UserMeetingService;
 import meeting.meetingv1.service.UserService;
 import meeting.meetingv1.service.VerificationCodeService;
 import meeting.meetingv1.util.GenerateVerificationCode;
@@ -25,6 +27,9 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 class MettingV1ApplicationTests {
@@ -121,13 +126,18 @@ class MettingV1ApplicationTests {
         userService.updatePwd("15086924104","密码");
     }
     @Autowired
-    UserMeetingMapper userMeetingMapper;
+    UserMeetingService userMeetingService;
     @Test
-    void userMeeting() {
-        UserMeeting userMeeting = new UserMeeting();
-        userMeeting.setMeetingid(1);
-        userMeeting.setType(new Byte("1"));
-        userMeeting.setUserid(1);
-        userMeetingMapper.delete(userMeeting);
+    void userMeeting() throws ParameterException {
+        List<UserMeeting> list = new ArrayList<>();
+        list.add(new UserMeeting(null,1,2,new Byte("3")));
+        list.add(new UserMeeting(null,1,3,new Byte("3")));
+        list.add(new UserMeeting(null,1,4,new Byte("3")));
+        list.add(new UserMeeting(null,1,5,new Byte("3")));
+        list.add(new UserMeeting(null,1,6,new Byte("3")));
+        for (UserMeeting userMeeting : list){
+            userMeetingService.addRelation(userMeeting);
+        }
+
     }
 }

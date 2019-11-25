@@ -1,10 +1,7 @@
 package meeting.meetingv1.exception.handler;
 
-import meeting.meetingv1.exception.IncorrectCredentialsException;
-import meeting.meetingv1.exception.SignUpColumnException;
-import meeting.meetingv1.exception.UnknownAccountException;
+import meeting.meetingv1.exception.*;
 import com.aliyuncs.exceptions.ClientException;
-import meeting.meetingv1.exception.VerificationException;
 import meeting.meetingv1.util.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +58,10 @@ public class WebExceptionHandler {
         // 发送邮件通知技术人员.
         return ResultBean.error(-99, "系统出现错误, 请联系网站管理员!");
     }
-
-
+    @ExceptionHandler
+    public ResultBean unknownException(ParameterException e) {
+        log.error("参数错误", e);
+        // 发送邮件通知技术人员.
+        return ResultBean.error(-9, "参数不合法");
+    }
 }

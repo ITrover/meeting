@@ -3,10 +3,15 @@ package meeting.meetingv1.mapper;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.pojo.UserMeetingExample;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 public interface UserMeetingMapper {
+
+    @Select("SELECT COUNT(*) FROM user_meeting WHERE meetingid=#{meetingid} AND type=#{type}")
+    int count(Byte type, Integer meetingid);
+
     @Delete("delete from user_meeting where userid=#{userid} AND meetingid=#{meetingid} AND type=#{type}")
     int delete(UserMeeting userMeeting);
     /**
