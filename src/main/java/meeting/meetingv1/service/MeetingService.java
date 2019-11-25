@@ -6,10 +6,12 @@ import meeting.meetingv1.pojo.Meeting;
 import meeting.meetingv1.pojo.MeetingExample;
 import meeting.meetingv1.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class MeetingService {
 
 
@@ -44,7 +46,7 @@ public class MeetingService {
 
 
     //    ordermode 0代表全部会议 1 代表过期的会议    2 代表没过期的会议
-    public List<Meeting> findMeetings(int userId, int offset, int limit, int orderMode) {
+    public List<Meeting> findMeetings(int offset, int limit, int orderMode) {
 //得到当前时间
         Date date = new Date();
         List<Meeting> meetings = meetingMapper.selectMeetings(offset, limit, orderMode, date);

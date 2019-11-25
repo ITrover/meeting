@@ -4,9 +4,10 @@ import meeting.meetingv1.mapper.GuestMapper;
 import meeting.meetingv1.pojo.Guest;
 import meeting.meetingv1.pojo.GuestExample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class GuestService {
     @Autowired
     GuestMapper guestMapper;
