@@ -33,8 +33,8 @@ public class DaoTest {
         Guest guest = new Guest();
         guest.setAvatarUrl("/jd.com");
         guest.setIntroduction("介绍");
-        guest.setGuestid(4);
-        guest.setMeetingid(4);
+        guest.setGuestid(5);
+        guest.setMeetingid(5);
 //        guestMapper.insert(guest);
         guestService.addguest(guest);
         List<Guest> byMeetingId = guestService.findByMeetingId(1);
@@ -45,16 +45,16 @@ public class DaoTest {
     @Test
     public  void meeetingtest() {
         Meeting meeting = new Meeting();
-        meeting.setMeetingid(11);
+        meeting.setMeetingid(12);
         meeting.setCloseTime(new Date());
         meeting.setStartTime(new Date());
         meeting.setIntroduction("meeting 介绍");
         meeting.setmName("会议1");
         meeting.setLocation("地点");
         meeting.setNeedvolunteer(1);
-//        meetingService.addMeeting(meeting);
-//        Meeting byId = meetingService.findById(6);
-//        System.out.println(byId);
+        meetingService.addMeeting(meeting);
+        Meeting byId = meetingService.findById(12);
+        System.out.println(byId);
         List<Meeting> meetings = meetingService.findMeetings(3, 2);
         int i = meetingMapper.selectMeetingRows();
         System.out.println(i);
@@ -63,12 +63,12 @@ public class DaoTest {
     @Test
     public  void  volunt(){
         Volunt volunt = new Volunt();
-        volunt.setNumber(1);
+        volunt.setNumber(2);
         volunt.setIntroduction("介绍");
         volunt.setIsproof(1);
-        volunt.setMeetid(1);
+        volunt.setMeetid(2);
         volunt.setVolunt(3);
-//        voluntService.addVolunt(volunt);
+        voluntService.addVolunt(volunt);
         Volunt volunt1 = voluntService.selectByMeetingId(1);
         System.out.println(volunt1);
     }
