@@ -122,4 +122,13 @@ public class Volunt extends VoluntKey {
     public void setIsproof(Integer isproof) {
         this.isproof = isproof;
     }
+
+    @Override
+    public String toString() {
+        return "Volunt{" +
+                "introduction='" + introduction + '\'' +
+                ", number=" + number +
+                ", isproof=" + isproof +
+                '}';
+    }
 }
