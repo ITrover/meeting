@@ -67,12 +67,11 @@ public interface MeetingMapper {
 
     /*
      *
-     *分页
+     *首页分页
      * */
     List<Meeting> selectMeetings(int offset, int limit);
 
     List<Meeting> selectMeetings(int offset, int limit, int orderMode, Date date);
-
     /*
     * 查询行数
     * */
