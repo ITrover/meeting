@@ -74,7 +74,6 @@ public class UserService {
         } catch (DuplicateKeyException e) {
             throw  new SignUpColumnException();
         }
-
         return true;
     }
     public boolean updatePwd(String mailAddr_or_Phone, String password) throws UnknownAccountException{

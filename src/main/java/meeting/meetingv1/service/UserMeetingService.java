@@ -5,6 +5,7 @@ import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.pojo.UserMeetingExample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,15 @@ public class UserMeetingService {
     UserMeetingMapper userMeetingMapper;
     public int getCount(Byte type, Integer meetingid){
         return userMeetingMapper.count(type, meetingid);
+    }
+
+    public List<UserMeeting> getMeetingsByBuilder(Integer userId){
+        UserMeetingExample example = new UserMeetingExample();
+        UserMeetingExample.Criteria criteria = example.createCriteria();
+        criteria.andUseridEqualTo(userId);
+        Byte type = 1;//查询创建的会议
+        criteria.andTypeEqualTo(type);
+        return userMeetingMapper.selectByExample(example);
     }
     public boolean addRelation(UserMeeting userMeeting) throws ParameterException {
         if (userMeeting.getType() != 2 && userMeeting.getType() != 3){

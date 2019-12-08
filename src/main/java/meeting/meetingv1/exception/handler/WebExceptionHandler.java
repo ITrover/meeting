@@ -60,8 +60,23 @@ public class WebExceptionHandler {
     }
     @ExceptionHandler
     public ResultBean unknownException(ParameterException e) {
-        log.error("参数错误", e);
+        log.error("参数不合法", e);
         // 发送邮件通知技术人员.
         return ResultBean.error(-9, "参数不合法");
+    }
+    @ExceptionHandler
+    public ResultBean unknownException(FileInfoStoreException e) {
+        log.error("文件信息保存失败", e);
+        return ResultBean.error(-10, "文件信息保存失败");
+    }
+    @ExceptionHandler
+    public ResultBean unknownException(FileSendException e) {
+        log.error("文件发送失败", e);
+        return ResultBean.error(-11, "文件发送失败");
+    }
+    @ExceptionHandler
+    public ResultBean unknownException(FileNotFindException1 e) {
+        log.error("文件不存在", e);
+        return ResultBean.error(-12, "文件不存在");
     }
 }

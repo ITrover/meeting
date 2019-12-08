@@ -15,7 +15,7 @@ public class MailService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("meeting.group@qq.com");
         mailMessage.setTo(mailAddr);
-        mailMessage.setSubject("会务管理系统通知");
+        mailMessage.setSubject("[会务管理系统通知]");
         mailMessage.setText(messageBody);
         mailSender.send(mailMessage);
         return true;
