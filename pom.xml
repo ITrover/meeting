@@ -12,6 +12,7 @@
     <artifactId>metting-v1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>metting-v1</name>
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -19,6 +20,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 <!--        swagger2-->
 
         <dependency>
@@ -109,10 +115,14 @@
     </dependencies>
 
     <build>
+        <finalName>meeting-v1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>meeting.meetingv1.MettingV1Application</mainClass>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
