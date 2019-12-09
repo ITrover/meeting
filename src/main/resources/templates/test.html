@@ -1,0 +1,29 @@
+
+<html lang="en">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p>Get your greeting <a href="/greeting">here</a></p>
+<form action="http://localhost:8080/uploadimg?phone=15086924104" method="POST" enctype="multipart/form-data">
+    头像文件：<input type="file" name="img"/>
+    <input type="submit" />
+</form>
+<form action="http://localhost:8080/file?meetingId=1" method="POST" enctype="multipart/form-data">
+    文件上传：<input type="file" name="file"/>
+    <input type="submit" />
+</form>
+<form action="http://localhost:8080/meetingIcon/1" method="POST" enctype="multipart/form-data">
+    会议图片上传：<input type="file" name="icon"/>
+    <input type="submit" />
+</form>
+<a href="/download">下载test</a>
+<p>多文件上传</p>
+<form method="POST" enctype="multipart/form-data" action="/batch/upload">
+    <p>文件1：<input type="file" name="file" /></p>
+    <p>文件2：<input type="file" name="file" /></p>
+    <p><input type="submit" value="上传" /></p>
+</form>
+</body>
+</html>

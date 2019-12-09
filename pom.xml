@@ -17,6 +17,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <skipTest>true</skipTest>
     </properties>
 
     <dependencies>
@@ -122,6 +123,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>meeting.meetingv1.MettingV1Application</mainClass>
+
                 </configuration>
             </plugin>
         </plugins>
