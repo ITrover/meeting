@@ -92,6 +92,9 @@ public class MeetingService {
         MeetingtypeExample meetingtypeExample = new MeetingtypeExample();
         meetingtypeExample.createCriteria().andTypeEqualTo(type);
         List<Meetingtype> meetingtypes = meetingtypeMapper.selectByExample(meetingtypeExample);
+        if (meetingtypes.size()==0){
+            return -1;
+        }
         Integer typeid = meetingtypes.get(0).getTypeid();
         return typeid;
     }

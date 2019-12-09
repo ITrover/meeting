@@ -28,7 +28,6 @@ public class SendSmsUtil {
     public boolean sendSms(String verificationCode, String phoneNumber) throws ServerException,ClientException{
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, secret);
         IAcsClient client = new DefaultAcsClient(profile);
-
         CommonRequest request = new CommonRequest();
         request.setMethod(MethodType.POST);
         request.setDomain("dysmsapi.aliyuncs.com");
