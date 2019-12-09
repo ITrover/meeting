@@ -122,9 +122,6 @@ public class UserService {
         if (user.getOrganization() != null){
             users.get(0).setOrganization(user.getOrganization());
         }
-        if (user.getAvatar() != null){
-            users.get(0).setAvatar(user.getAvatar());
-        }
         userMapper.updateByPrimaryKeySelective(users.get(0));
         return users.get(0);
     }

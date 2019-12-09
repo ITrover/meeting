@@ -55,7 +55,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 } catch (JWTDecodeException j) {
                     throw new RuntimeException("401");
                 }
-                User user = userService.findUserById(Integer.getInteger(userId));
+                Integer uId=new Integer(userId);
+                User user = userService.findUserById(uId);
                 if (user == null) {
                     throw new RuntimeException("用户不存在，请重新登录");
                 }
@@ -66,9 +67,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 } catch (JWTVerificationException e) {
                     throw new RuntimeException("401");
                 }
-                HttpSession session = httpServletRequest.getSession(true);
-                session.setAttribute("userId",user.getUserid());
 
+                 HttpSession session = httpServletRequest.getSession(true);
+                if (session.getAttribute("userId")==null){
+                    session.setAttribute("userId",user.getUserid());
+                }
                 return true;
             }
         }

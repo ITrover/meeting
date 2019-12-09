@@ -1,6 +1,8 @@
 package meeting.meetingv1.controller;
 
 import com.aliyuncs.exceptions.ClientException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.PassToken;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.IncorrectCredentialsException;
@@ -16,14 +18,19 @@ import meeting.meetingv1.util.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@Api(tags = "用户信息处理接口")
 public class UserController {
     @Autowired
     UserService userService;
@@ -34,17 +41,28 @@ public class UserController {
     @Autowired
     MailService mailService;
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    @PassToken
-    @RequestMapping("hello")
-    public User userController(){
-        return userService.findUserById(2);
-    }
+//    @PassToken
+//    @RequestMapping("hello")
+//    public User userController(){
+//        return userService.findUserById(2);
+//    }
 
-    @RequestMapping("login")
+    @PostMapping("login")
+    @ApiOperation(value = "登陆获取token",notes = "参数： 1、手机或邮箱：key  2、密码 password<br>返回：json中data字段有两个，jwt的值为token字符串，user为用户信息的序列化")
     public ResultBean login(String key,String password) throws IncorrectCredentialsException, UnknownAccountException {
         Map<String,Object> map = new HashMap<>();
         map.put("jwt",userService.loginCheck(key,password));
         map.put("user",userService.findUserByKey(key));
+        return ResultBean.success(map);
+    }
+    @GetMapping("info")
+    @UserLoginToken
+    @ApiOperation(value = "获取用户信息",notes = "参数： 1、登陆token<br>返回info字段为用户信息的json字符串")
+    public ResultBean getUserInfo(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        Integer userId = (Integer) session.getAttribute("userId");
+        Map<String,User> map = new HashMap<String,User>();
+        map.put("info",userService.findUserById(userId));
         return ResultBean.success(map);
     }
 
@@ -55,6 +73,7 @@ public class UserController {
      * @throws SignUpColumnException
      */
     @PostMapping("signup")
+    @ApiOperation(value = "用户注册",notes = "参数： 1、验证码 verificationCode; 用户信息realname、username(必选)、gender、emailaddr(必选)、phone(必选)、password(必选)、organization组成的对象序列化后的字符串为用户信息的序列化")
     public ResultBean signUp(User user,String verificationCode) throws SignUpColumnException, VerificationException {
         codeService.doVerified(user.getPhone(),verificationCode);
         userService.signUp(user);
@@ -69,7 +88,8 @@ public class UserController {
      * @throws ClientException
      */
     @PostMapping("verificationCode")
-    public ResultBean getVriCode(String mailAddr_or_Phone) throws ClientException {
+    @ApiOperation(value = "获取验证码",notes = "参数： 1、手机或邮箱：mailAddr_or_Phone<br>注意：验证码可用于注册和修改用户信息")
+    public ResultBean getVriCode( String mailAddr_or_Phone) throws ClientException {
         boolean isMail = mailAddr_or_Phone.matches("^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$");
         if (isMail){
             mailService.SendToMail(mailAddr_or_Phone,"您好，您的验证码为 " + codeService.getVerificationCode(mailAddr_or_Phone));
@@ -80,6 +100,7 @@ public class UserController {
     }
 
     @PostMapping("updatePwd")
+    @ApiOperation(value = "修改密码",notes = "参数： 1、手机或邮箱：mailAddr_or_Phone 2、密码 password 3、验证码verificationCode")
     public ResultBean updatePassword(String mailAddr_or_Phone, String password, String verificationCode ) throws VerificationException, UnknownAccountException {
         codeService.doVerified(mailAddr_or_Phone,verificationCode);
         userService.updatePwd(mailAddr_or_Phone, password);
@@ -87,6 +108,7 @@ public class UserController {
     }
     @UserLoginToken
     @PostMapping("update")
+    @ApiOperation(value = "修改用户信息",notes = "参数： 1、登陆token<br>2、可选字段：用户名 username;真实名 realname;性别 gender;所属组织 organization;")
     public ResultBean updateUserInfo(User user){
         userService.updateUserInfo(user);
         return ResultBean.success();

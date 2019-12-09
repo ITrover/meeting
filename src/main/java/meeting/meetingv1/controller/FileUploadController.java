@@ -1,24 +1,20 @@
 package meeting.meetingv1.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.FileNotFindException1;
 import meeting.meetingv1.exception.FileSendException;
-import meeting.meetingv1.pojo.Meeting;
 import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.service.MeetFileSercice;
-import meeting.meetingv1.service.MeetingService;
 import meeting.meetingv1.service.UserMeetingService;
 import meeting.meetingv1.service.UserService;
 import meeting.meetingv1.util.ResultBean;
-import org.apache.ibatis.annotations.Delete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,10 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
-
+@Api(tags = {"会议相关文档操作接口"})
 @RestController
 public class FileUploadController {
     @Value("${user.avatar.path}")
@@ -45,8 +40,9 @@ public class FileUploadController {
     @Autowired
     UserMeetingService userMeetingService;
 
-//    @UserLoginToken
+    @UserLoginToken
     @PostMapping("/uploadimg")
+    @ApiOperation(value = "上传用户头像",notes = "参数：1、用户的电话号 phone 2、文件上传时name应为img 3、登陆token <br> 获取头像方式: 在上传图片后会将文件名以随机生成的uuid命名，文件名在用户字段的avatar中，直接访问服务器的80端口即可<br>如：172.0.0.1:80/1.png")
     public ResultBean upload(@RequestParam("img")MultipartFile uploadFile, HttpServletRequest request, String phone) {
         if (uploadFile == null){
             return ResultBean.error(-7,"未选择文件");
@@ -74,7 +70,9 @@ public class FileUploadController {
             return ResultBean.error(-8,"文件保存失败");
         }
     }
+    @UserLoginToken
     @PostMapping("/file")
+    @ApiOperation(value = "上传一个会议相关文件",notes = "参数： <br>1、会议ID meetingId  <br>2、文件上传时name应为file  <br>3、登陆token  <br> 注意：上传同名文件将覆盖旧文件")
     public ResultBean uploadMeetingFile(@RequestParam("file")MultipartFile uploadFile,String meetingId){
         if (uploadFile == null){
             return ResultBean.error(-7,"未选择文件");
@@ -97,13 +95,16 @@ public class FileUploadController {
         }
         return  ResultBean.success();
     }
-    @GetMapping("/fileList")
+
+    @GetMapping("/fileList")//获取会议相关的文件
+    @ApiOperation(value = "获取会议相关的文件ID列表",notes = "参数： <br>1、会议ID meetingId  <br> 注意：返回的Json中data字段有会议ID：fileid;对应的会议id:meetingid;文件的物理路径：path;文件名：name;")
     public ResultBean getFileList(Integer meetingId){
         Map<String, List> data = new HashMap<>();
         data.put("data",meetFileSercice.getFileInfoByMeetID(meetingId));
         return ResultBean.success(data);
     }
     @GetMapping("/file")
+    @ApiOperation(value = "下载一个文件",notes = "参数： <br>1、会议ID meetingId<br>2、文件名fileName")
     public String downLoad(HttpServletResponse response,Integer meetingId,String fileName) throws FileNotFindException1, FileSendException {
         File file = new File(meetingFileRootPath+"/"+meetingId+"/"+fileName);
         if (!file.exists()){
@@ -135,6 +136,7 @@ public class FileUploadController {
 
     @UserLoginToken
     @DeleteMapping("/file")
+    @ApiOperation(value = "删除一个会议相关文件",notes = "参数： <br>1、会议ID meetingId<br>2、文件名 fileId <br>注意：只有会议创建者才有权限删除文件，否则返回对应错误信息")
     public ResultBean deleteFile(HttpServletRequest httpServletRequest,Integer meetingId,Integer fileId){
         HttpSession session = httpServletRequest.getSession(false);
         Integer userId = (Integer)session.getAttribute("userId");

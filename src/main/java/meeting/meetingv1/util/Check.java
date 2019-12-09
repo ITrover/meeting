@@ -9,9 +9,9 @@ import java.util.List;
 
 public class Check {
     public static boolean checkUp(HttpServletRequest httpServletRequest, UserMeetingService userMeetingService,Integer meetingId){
-//        HttpSession session = httpServletRequest.getSession(false);
-//        Integer userId = (Integer)session.getAttribute("userId");
-        List<UserMeeting> meetingsByBuilder = userMeetingService.getMeetingsByBuilder(1);
+        HttpSession session = httpServletRequest.getSession(false);
+        Integer userId = (Integer)session.getAttribute("userId");
+        List<UserMeeting> meetingsByBuilder = userMeetingService.getMeetingsByBuilder(userId);
         boolean flag = false;
         for (UserMeeting userMeeting :meetingsByBuilder){
             if (userMeeting.getUserid().equals(meetingId)){
@@ -19,5 +19,9 @@ public class Check {
             }
         }
         return false;
+    }
+    public static Integer getUserID(HttpServletRequest httpServletRequest){
+        HttpSession session = httpServletRequest.getSession(false);
+        return (Integer)session.getAttribute("userId");
     }
 }
