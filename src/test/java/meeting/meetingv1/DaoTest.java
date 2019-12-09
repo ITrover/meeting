@@ -4,6 +4,7 @@ import meeting.meetingv1.mapper.GuestMapper;
 import meeting.meetingv1.mapper.MeetingMapper;
 import meeting.meetingv1.pojo.Guest;
 import meeting.meetingv1.pojo.Meeting;
+import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.pojo.Volunt;
 import meeting.meetingv1.service.GuestService;
 import meeting.meetingv1.service.MeetingService;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +74,7 @@ public class DaoTest {
 //        Volunt volunt1 = voluntService.selectByMeetingId(1);
 //        System.out.println(volunt1);
 //    }
+
 }
 
 

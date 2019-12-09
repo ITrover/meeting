@@ -9,6 +9,7 @@ import meeting.meetingv1.exception.IncorrectCredentialsException;
 import meeting.meetingv1.exception.SignUpColumnException;
 import meeting.meetingv1.exception.UnknownAccountException;
 import meeting.meetingv1.exception.VerificationException;
+import meeting.meetingv1.pojo.Guest;
 import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.service.MailService;
 import meeting.meetingv1.service.SmsService;
@@ -26,7 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -42,10 +45,16 @@ public class UserController {
     MailService mailService;
     private Logger log = LoggerFactory.getLogger(this.getClass());
 //    @PassToken
-//    @RequestMapping("hello")
-//    public User userController(){
-//        return userService.findUserById(2);
-//    }
+    @RequestMapping("hello")
+    public List userController(){
+        List<Guest> list = new ArrayList<>();
+        list.add(new Guest());
+        list.add(new Guest());
+        list.add(new Guest());
+        list.add(new Guest());
+        list.add(new Guest());
+        return list;
+    }
 
     @PostMapping("login")
     @ApiOperation(value = "登陆获取token",notes = "参数： 1、手机或邮箱：key  2、密码 password<br>返回：json中data字段有两个，jwt的值为token字符串，user为用户信息的序列化")
