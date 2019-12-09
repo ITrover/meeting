@@ -1,5 +1,6 @@
 package meeting.meetingv1.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.pojo.Guest;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @Controller
+@Api(tags = "会议相关接口")
 public class MeetingController {
     @Autowired
     MeetingService meetingService;
