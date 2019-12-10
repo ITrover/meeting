@@ -58,10 +58,12 @@ public class VoluntEventController {
     }
     @PostMapping("joinVolunteer/{meetingId}")
     @UserLoginToken
+    @ApiOperation(value = "用户申请志愿者",notes = "参数： <br>1、会议id meetingId <br>2、登陆token<br>")
     public ResultBean join(@PathVariable Integer meetingId, HttpServletRequest request) throws ParameterException {
-        Byte b = 4;
+        Byte b = 4;//4 为申请志愿者
         userMeetingService.addRelation(new UserMeeting(null,Check.getUserID(request),meetingId,b));
         return ResultBean.success();
     }
+
 
 }

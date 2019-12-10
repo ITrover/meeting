@@ -1,13 +1,12 @@
 package meeting.meetingv1;
 
+import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.mapper.GuestMapper;
 import meeting.meetingv1.mapper.MeetingMapper;
-import meeting.meetingv1.pojo.Guest;
-import meeting.meetingv1.pojo.Meeting;
-import meeting.meetingv1.pojo.User;
-import meeting.meetingv1.pojo.Volunt;
+import meeting.meetingv1.pojo.*;
 import meeting.meetingv1.service.GuestService;
 import meeting.meetingv1.service.MeetingService;
+import meeting.meetingv1.service.UserMeetingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -73,7 +72,19 @@ public class DaoTest {
 //        Volunt volunt1 = voluntService.selectByMeetingId(1);
 //        System.out.println(volunt1);
 //    }
+    @Autowired
+    UserMeetingService userMeetingService;
+    @Test
+    void name() throws ParameterException {
+        UserMeeting userMeeting = new UserMeeting();
+        userMeeting.setUserid(1);
+        userMeeting.setMeetingid(1);
+        Byte b = 2;
+        userMeeting.setType(b);
+        userMeetingService.addRelation(userMeeting);
 
+        System.out.println(userMeeting.getId());
+    }
 }
 
 
