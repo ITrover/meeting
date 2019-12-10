@@ -8,7 +8,6 @@ import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.pojo.Volunt;
 import meeting.meetingv1.service.GuestService;
 import meeting.meetingv1.service.MeetingService;
-import meeting.meetingv1.service.VoluntService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

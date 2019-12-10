@@ -28,7 +28,7 @@ public class UserMeetingControllor {
 
     @UserLoginToken
     @PostMapping("/preference/{type}")
-    @ApiOperation(value = "参加/收藏会议",notes = "参数： <br>1、登陆token<br>2、路径变量操作类型（2为参加 3为收藏）<br>3、会议id meetingId")
+    @ApiOperation(value = "参加/收藏会议",notes = "参数： <br>1、登陆token<br>2、路径变量操作类型（2为参加 3为收藏 ）<br>3、会议id meetingId")
     public ResultBean preference(@PathVariable("type") Integer type, int meetingId, HttpServletRequest request) throws ParameterException {
         userMeetingService.addRelation(new UserMeeting(null, Check.getUserID(request),meetingId,new Byte(type.toString())));
         return ResultBean.success();
@@ -67,6 +67,8 @@ public class UserMeetingControllor {
         return ResultBean.success(map);
     }
     @GetMapping("/meetPreference/{type}")
+    @ApiOperation(value = "获取自己会议 被参加、收藏、申请志愿者的详细信息 ",notes = "参数： <br>1、会议id meetingId<br>2、路径变量操作类型（2为参加 3为收藏）" +
+            "<br>data字段中count为次数")
     public ResultBean getPreference(@PathVariable("type") String type, int meetingId){
         Map<String, List> map = new HashMap<>();
         List<UserMeeting> byMeet = userMeetingService.findPreferenceByMeet(meetingId, new Byte(type));

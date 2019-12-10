@@ -194,66 +194,6 @@ public class VoluntExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andVoluntIsNull() {
-            addCriterion("volunt is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntIsNotNull() {
-            addCriterion("volunt is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntEqualTo(Integer value) {
-            addCriterion("volunt =", value, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntNotEqualTo(Integer value) {
-            addCriterion("volunt <>", value, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntGreaterThan(Integer value) {
-            addCriterion("volunt >", value, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntGreaterThanOrEqualTo(Integer value) {
-            addCriterion("volunt >=", value, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntLessThan(Integer value) {
-            addCriterion("volunt <", value, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntLessThanOrEqualTo(Integer value) {
-            addCriterion("volunt <=", value, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntIn(List<Integer> values) {
-            addCriterion("volunt in", values, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntNotIn(List<Integer> values) {
-            addCriterion("volunt not in", values, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntBetween(Integer value1, Integer value2) {
-            addCriterion("volunt between", value1, value2, "volunt");
-            return (Criteria) this;
-        }
-
-        public Criteria andVoluntNotBetween(Integer value1, Integer value2) {
-            addCriterion("volunt not between", value1, value2, "volunt");
-            return (Criteria) this;
-        }
-
         public Criteria andMeetidIsNull() {
             addCriterion("meetid is null");
             return (Criteria) this;
@@ -501,6 +441,66 @@ public class VoluntExample {
 
         public Criteria andIsproofNotBetween(Integer value1, Integer value2) {
             addCriterion("isproof not between", value1, value2, "isproof");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullIsNull() {
+            addCriterion("full is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullIsNotNull() {
+            addCriterion("full is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullEqualTo(Integer value) {
+            addCriterion("full =", value, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullNotEqualTo(Integer value) {
+            addCriterion("full <>", value, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullGreaterThan(Integer value) {
+            addCriterion("full >", value, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullGreaterThanOrEqualTo(Integer value) {
+            addCriterion("full >=", value, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullLessThan(Integer value) {
+            addCriterion("full <", value, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullLessThanOrEqualTo(Integer value) {
+            addCriterion("full <=", value, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullIn(List<Integer> values) {
+            addCriterion("full in", values, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullNotIn(List<Integer> values) {
+            addCriterion("full not in", values, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullBetween(Integer value1, Integer value2) {
+            addCriterion("full between", value1, value2, "full");
+            return (Criteria) this;
+        }
+
+        public Criteria andFullNotBetween(Integer value1, Integer value2) {
+            addCriterion("full not between", value1, value2, "full");
             return (Criteria) this;
         }
     }

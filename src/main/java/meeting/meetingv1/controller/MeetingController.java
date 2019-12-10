@@ -3,13 +3,14 @@ package meeting.meetingv1.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.UserLoginToken;
+import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.pojo.Guest;
 import meeting.meetingv1.pojo.Meeting;
 import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.pojo.Volunt;
 import meeting.meetingv1.service.GuestService;
 import meeting.meetingv1.service.MeetingService;
-import meeting.meetingv1.service.VoluntService;
+import meeting.meetingv1.service.VoluntEventService;
 import meeting.meetingv1.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -24,18 +25,18 @@ public class MeetingController {
     @Autowired
     MeetingService meetingService;
     @Autowired
-    VoluntService voluntService;
+    VoluntEventService voluntService;
     @Autowired
     GuestService guestService;
 
     //还没测试
     @ResponseBody
     @RequestMapping(path = "meeting/add", method = RequestMethod.POST)
-    public ResultBean publishMeeting(Meeting meeting, Volunt volunt, ArrayList<Guest> guests) {
+    public ResultBean publishMeeting(Meeting meeting, Volunt volunt, ArrayList<Guest> guests) throws ParameterException {
         System.out.println(meeting+""+volunt+guests);
 //        System.out.println(meeting+" "+volunt+guests);
         meetingService.addMeeting(meeting);
-        voluntService.addVolunt(volunt);
+        voluntService.addVoluntEvent(volunt);
         for (int i = 0; i < guests.size(); i++) {
             guestService.addguest(guests.get(i));
         }
@@ -50,7 +51,7 @@ public class MeetingController {
     public ResultBean getMeetingDetail(@PathVariable("meetingId") int id) {
         Meeting meeting = meetingService.findById(id);
         Map map = new HashMap();
-        Volunt volunt = voluntService.selectByMeetingId(id);
+        Volunt volunt = voluntService.getVoEventByMeetingId(id);
         List<Guest> guests = guestService.findByMeetingId(id);
         map.put("meeting", meeting);
         map.put("volunt", volunt);

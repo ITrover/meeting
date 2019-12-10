@@ -45,16 +45,16 @@ public class UserController {
     MailService mailService;
     private Logger log = LoggerFactory.getLogger(this.getClass());
 //    @PassToken
-    @RequestMapping("hello")
-    public List userController(){
-        List<Guest> list = new ArrayList<>();
-        list.add(new Guest());
-        list.add(new Guest());
-        list.add(new Guest());
-        list.add(new Guest());
-        list.add(new Guest());
-        return list;
-    }
+//    @RequestMapping("hello")//测试用
+//    public List userController(){
+//        List<Guest> list = new ArrayList<>();
+//        list.add(new Guest());
+//        list.add(new Guest());
+//        list.add(new Guest());
+//        list.add(new Guest());
+//        list.add(new Guest());
+//        return list;
+//    }
 
     @PostMapping("login")
     @ApiOperation(value = "登陆获取token",notes = "参数： 1、手机或邮箱：key  2、密码 password<br>返回：json中data字段有两个，jwt的值为token字符串，user为用户信息的序列化")
