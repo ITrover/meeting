@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -64,6 +65,30 @@ public class VoluntEventController {
         userMeetingService.addRelation(new UserMeeting(null,Check.getUserID(request),meetingId,b));
         return ResultBean.success();
     }
-
-
+    @GetMapping("joinVolunteer/{meetingId}")
+    @UserLoginToken
+    @ApiOperation(value = "会议发起者查看申请志愿者的信息",notes = "参数： <br>1、会议id meetingId <br>2、登陆token <br>数据部分的info是用户和会议的对应信息，当然这里只有会议的组织者才能查看")
+    public ResultBean sayYES(@PathVariable Integer meetingId, HttpServletRequest request){
+        if (!(Check.checkUp(request,userMeetingService,meetingId)))
+        {
+            return ResultBean.error(-12,"无权限");
+        }
+        Map<String, List> map = new HashMap<>();
+        List<UserMeeting> byMeet = userMeetingService.findPreferenceByMeet(meetingId, new Byte("4"));
+        map.put("info",byMeet);
+        return ResultBean.success(map);
+    }
+    @GetMapping("joinVolunteer/{meetingId}")
+    @UserLoginToken
+    @ApiOperation(value = "会议组织者通过或拒绝志愿者请求",notes = "参数： <br>1、会议id meetingId <br>2、登陆token <br>3. 操作对象用户的ID userId<br>4. 操作指令 type 5：通过为志愿者 6：拒绝成为志愿者数据部分的info是用户和会议的对应信息，当然这里只有会议的组织者才能查看")
+    public ResultBean passRequest(@PathVariable Integer meetingId, HttpServletRequest request ,Integer userId,int type){
+        if (!(Check.checkUp(request,userMeetingService,meetingId)) || (type != 4 && type != 5))
+        {
+            return ResultBean.error(-12,"无权限");
+        }
+        UserMeeting userMeeting = new UserMeeting();
+        userMeeting.setType(new Byte((byte) type));
+        userMeeting.setMeetingid(meetingId);
+        return ResultBean.success();
+    }
 }

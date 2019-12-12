@@ -3,6 +3,7 @@ package meeting.meetingv1.controller;
 import com.aliyuncs.exceptions.ClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import meeting.meetingv1.MQ.KafkaSender;
 import meeting.meetingv1.annotation.PassToken;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.IncorrectCredentialsException;
@@ -20,10 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -44,17 +42,27 @@ public class UserController {
     @Autowired
     MailService mailService;
     private Logger log = LoggerFactory.getLogger(this.getClass());
-//    @PassToken
-//    @RequestMapping("hello")//测试用
-//    public List userController(){
-//        List<Guest> list = new ArrayList<>();
-//        list.add(new Guest());
-//        list.add(new Guest());
-//        list.add(new Guest());
-//        list.add(new Guest());
-//        list.add(new Guest());
-//        return list;
+
+//    @Autowired
+//    KafkaSender kafkaSender;
+//    @RequestMapping("hello/{s}")//测试用
+//    public String userController(@PathVariable String s){
+//        kafkaSender.sendMsg("test2","121","测试消息1111111 "+s);
+//        System.out.println("发送完成");
+//        return "";
 //    }
+
+    @PostMapping("publicInfo")
+    @ApiOperation(value = "获取用户公开的信息",notes = "参数： 1、用户ID <br>说明：这个接口的主要目的在会议的组织者查看请求的志愿者信息，其他用途也可以，并没设置登陆验证")
+    public ResultBean getUserById(Integer userId){
+        User userById = userService.findUserById(userId);
+        userById.setPhone(null);
+        userById.setPassword(null);
+//        userById.setUserid(null);
+        Map<String,User> map = new HashMap<>();
+        map.put("info",userById);
+        return ResultBean.success(map);
+    }
 
     @PostMapping("login")
     @ApiOperation(value = "登陆获取token",notes = "参数： 1、手机或邮箱：key  2、密码 password<br>返回：json中data字段有两个，jwt的值为token字符串，user为用户信息的序列化")
@@ -66,7 +74,7 @@ public class UserController {
     }
     @GetMapping("info")
     @UserLoginToken
-    @ApiOperation(value = "获取用户信息",notes = "参数： 1、登陆token<br>返回info字段为用户信息的json字符串")
+    @ApiOperation(value = "获取当前登陆用户信息",notes = "参数： 1、登陆token<br>返回info字段为用户信息的json字符串")
     public ResultBean getUserInfo(HttpServletRequest request){
         HttpSession session = request.getSession(false);
         Integer userId = (Integer) session.getAttribute("userId");

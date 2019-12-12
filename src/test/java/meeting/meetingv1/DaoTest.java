@@ -1,19 +1,12 @@
 package meeting.meetingv1;
 
 import meeting.meetingv1.exception.ParameterException;
-import meeting.meetingv1.mapper.GuestMapper;
-import meeting.meetingv1.mapper.MeetingMapper;
 import meeting.meetingv1.pojo.*;
-import meeting.meetingv1.service.GuestService;
-import meeting.meetingv1.service.MeetingService;
 import meeting.meetingv1.service.UserMeetingService;
+import meeting.meetingv1.MQ.KafkaSender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @SpringBootTest
 public class DaoTest {
@@ -85,6 +78,15 @@ public class DaoTest {
 
         System.out.println(userMeeting.getId());
     }
+
+    @Autowired
+    KafkaSender kafkaSender;
+    @Test
+    void kafkaSender() {
+        //kafkaSender.sendMsg("test2 ","测试消息1111111");
+        System.out.println("发送完成");
+    }
+
 }
 
 
