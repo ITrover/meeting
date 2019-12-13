@@ -11,14 +11,36 @@ import java.util.List;
 public class GuestService {
     @Autowired
     GuestMapper guestMapper;
-    public int  addguest(Guest guest){
+    public int addGuest(Guest guest){
         if(guest==null){
          throw new IllegalArgumentException("参数不能为空!");
         }
         int i = guestMapper.insert(guest);
         return i;
     }
-    public  List<Guest> findByMeetingId(int meetingid){
+    public boolean updateGuest(Guest guest){
+        if(guest.getMeetingid() == null || guest.getGuestid() == null){
+            throw new IllegalArgumentException("参数不能为空!");
+        }
+        Guest guest1 = guestMapper.selectByPrimaryKey(guest);
+        if (guest.getAvatarUrl() != null){
+            guest1.setAvatarUrl(guest.getAvatarUrl());
+        }
+        if (guest.getIntroduction() != null){
+            guest1.setIntroduction(guest.getIntroduction());
+        }
+        guestMapper.updateByPrimaryKey(guest1);
+        return true;
+    }
+    public boolean deleteGuest(Guest guest){
+
+        if(guest.getMeetingid() == null || guest.getGuestid() == null){
+            throw new IllegalArgumentException("参数不能为空!");
+        }
+        guestMapper.deleteByPrimaryKey(guest);
+        return true;
+    }
+    public List<Guest> findByGuestMeetingId(int meetingid){
         GuestExample guestExample = new GuestExample();
         guestExample.createCriteria().andMeetingidEqualTo(meetingid);
         List<Guest> guests = guestMapper.selectByExample(guestExample);

@@ -38,7 +38,7 @@ public class MeetingController {
         meetingService.addMeeting(meeting);
         voluntService.addVoluntEvent(volunt);
         for (int i = 0; i < guests.size(); i++) {
-            guestService.addguest(guests.get(i));
+            guestService.addGuest(guests.get(i));
         }
 //        guestService.addguest(guests);
         return ResultBean.success();
@@ -52,7 +52,7 @@ public class MeetingController {
         Meeting meeting = meetingService.findById(id);
         Map map = new HashMap();
         Volunt volunt = voluntService.getVoEventByMeetingId(id);
-        List<Guest> guests = guestService.findByMeetingId(id);
+        List<Guest> guests = guestService.findByGuestMeetingId(id);
         map.put("meeting", meeting);
         map.put("volunt", volunt);
         map.put("guests", guests);
