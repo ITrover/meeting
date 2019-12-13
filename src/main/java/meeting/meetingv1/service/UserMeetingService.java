@@ -58,4 +58,21 @@ public class UserMeetingService {
         List<UserMeeting> list = userMeetingMapper.selectByExample(userMeetingExample);
         return list;
     }
+    //改变申请志愿者状态
+    public boolean updateVolunteer(UserMeeting userMeeting) throws ParameterException{
+        UserMeetingExample userMeetingExample = new UserMeetingExample();
+        UserMeetingExample.Criteria criteria = userMeetingExample.createCriteria();
+        criteria.andTypeEqualTo((byte)4);
+        criteria.andUseridEqualTo(userMeeting.getUserid());
+        criteria.andMeetingidEqualTo(userMeeting.getMeetingid());
+        List<UserMeeting> userMeetings = userMeetingMapper.selectByExample(userMeetingExample);
+        if (userMeetings.size() != 1 || (userMeeting.getType()!=5 && userMeeting.getType()!=6))
+        {
+            throw new ParameterException();
+        }
+        UserMeeting userMeeting1 = userMeetings.get(0);
+        userMeeting1.setType(userMeeting.getType());
+        userMeetingMapper.insert(userMeeting1);
+        return true;
+    }
 }

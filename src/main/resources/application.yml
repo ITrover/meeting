@@ -25,7 +25,7 @@ spring:
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   kafka:
-    bootstrap-servers: www.ljhhhx.com:9092 # 指定kafka 代理地址，可以多个
+    bootstrap-servers: 39.108.158.74:9092 # 指定kafka 代理地址，可以多个
     producer: # 生产者
       retries: 1 # 设置大于0的值，则客户端会将发送失败的记录重新发送
       # 每次批量发送消息的数量
@@ -34,8 +34,11 @@ spring:
       # 指定消息key和消息体的编解码方式
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      concurrency: 4
     consumer:
       group-id: my-consumer-group
+
 
 mybatis:
   mapper-locations: classpath:meeting/meetingv1/mapper/*Mapper.xml

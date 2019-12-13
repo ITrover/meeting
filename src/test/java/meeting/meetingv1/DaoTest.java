@@ -1,5 +1,9 @@
 package meeting.meetingv1;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import meeting.meetingv1.MQ.Event;
+import meeting.meetingv1.MQ.VolunStatusInfo;
 import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.pojo.*;
 import meeting.meetingv1.service.UserMeetingService;
@@ -82,11 +86,30 @@ public class DaoTest {
     @Autowired
     KafkaSender kafkaSender;
     @Test
-    void kafkaSender() {
-        //kafkaSender.sendMsg("test2 ","测试消息1111111");
-        System.out.println("发送完成");
+    void kafkaSender() throws JsonProcessingException {
+        kafkaSender.sendMsg("test2","测试消息2");
+//        VolunStatusInfo volunStatusInfo = new VolunStatusInfo();
+//        volunStatusInfo.setMeetingId(1)
+//                .setType(6)
+//                .setUserId(2);
+//        kafkaSender.sendMsg("VolunStatusInfo",objectMapper.writeValueAsString(volunStatusInfo));
+//        System.out.println("发送完成");
     }
+    @Autowired
+    ObjectMapper objectMapper;
+    @Test
+    void ceshiJs() throws JsonProcessingException {
+        Event event = new Event();
+//        event.setMessage(new Message(null, 0, 1, 2, "测试消息"));
+//        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(event);
 
+        System.out.println(json);
+
+        Event event1 = objectMapper.readValue(json, Event.class);
+        System.out.println(event1.getMessage().getContent());
+        System.out.println(event1.getMessage());
+    }
 }
 
 

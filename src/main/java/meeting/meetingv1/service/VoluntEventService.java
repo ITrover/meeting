@@ -40,7 +40,7 @@ public class VoluntEventService {
         if (volunt.getFull()!=null){
             volunt1.setFull(volunt.getFull());
         }
-        voluntMapper.insert(volunt1);
+        voluntMapper.updateByPrimaryKey(volunt1);
         return volunt1;
     }
 }
