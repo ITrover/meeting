@@ -1,5 +1,6 @@
 package meeting.meetingv1.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.pojo.Message;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@Api(tags = {"获取用户通知操作接口"})
 public class MsgController {
 
     @Autowired

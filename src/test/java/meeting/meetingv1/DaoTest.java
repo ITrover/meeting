@@ -71,7 +71,7 @@ public class DaoTest {
 //    }
     @Autowired
     UserMeetingService userMeetingService;
-    @Test
+//    @Test
     void name() throws ParameterException {
         UserMeeting userMeeting = new UserMeeting();
         userMeeting.setUserid(1);
@@ -85,9 +85,9 @@ public class DaoTest {
 
     @Autowired
     KafkaSender kafkaSender;
-    @Test
+//    @Test
     void kafkaSender() throws JsonProcessingException {
-        kafkaSender.sendMsg("test2","测试消息2");
+//        kafkaSender.sendMsg("test2","测试消息2");
 //        VolunStatusInfo volunStatusInfo = new VolunStatusInfo();
 //        volunStatusInfo.setMeetingId(1)
 //                .setType(6)
@@ -97,7 +97,7 @@ public class DaoTest {
     }
     @Autowired
     ObjectMapper objectMapper;
-    @Test
+//    @Test
     void ceshiJs() throws JsonProcessingException {
         Event event = new Event();
 //        event.setMessage(new Message(null, 0, 1, 2, "测试消息"));
