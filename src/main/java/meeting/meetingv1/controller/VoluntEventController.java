@@ -12,9 +12,8 @@ import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.pojo.Message;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.pojo.Volunt;
-import meeting.meetingv1.service.MeetingService;
-import meeting.meetingv1.service.UserMeetingService;
-import meeting.meetingv1.service.VoluntEventService;
+import meeting.meetingv1.pojo.Voluntinfo;
+import meeting.meetingv1.service.*;
 import meeting.meetingv1.util.Check;
 import meeting.meetingv1.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,8 @@ public class VoluntEventController {
     @Autowired
     UserMeetingService userMeetingService;
     @Autowired
+    VoUserTaskInfoService voUserTaskInfoService;
+    @Autowired
     KafkaSender kafkaSender;
     @Autowired
     ObjectMapper objectMapper;
@@ -44,6 +45,7 @@ public class VoluntEventController {
     @ApiOperation(value = "获取会议志愿活动信息",notes = "参数： 1、会议ID meetingId  <a href=\"http://www.ljhhhx.com/voluntInfo.png\">实体字段介绍截图</a>")
     public ResultBean getVoluntEventInfo(Integer meetingId){
         Map<String, Volunt> map = new HashMap<>();
+
         map.put("info",voluntEventService.getVoEventByMeetingId(meetingId));
         return ResultBean.success(map);
     }
@@ -69,10 +71,14 @@ public class VoluntEventController {
     }
     @PostMapping("joinVolunteer/{meetingId}")
     @UserLoginToken
-    @ApiOperation(value = "用户申请志愿者",notes = "参数： <br>1、会议id meetingId <br>2、登陆token<br>")
-    public ResultBean join(@PathVariable Integer meetingId, HttpServletRequest request) throws ParameterException {
+    @ApiOperation(value = "用户申请志愿者",notes = "参数： <br>1、会议id meetingId" +
+            "<br>2、登陆token" +
+            "<br>3. 用户学号(可选)" +
+            "<br>4. 用户身份证号(可选)")
+    public ResultBean join(@PathVariable Integer meetingId, Voluntinfo voluntinfo, HttpServletRequest request) throws ParameterException {
         Byte b = 4;//4 为申请志愿者
         userMeetingService.addRelation(new UserMeeting(null,Check.getUserID(request),meetingId,b));
+        voUserTaskInfoService.add(voluntinfo);
         return ResultBean.success();
     }
 

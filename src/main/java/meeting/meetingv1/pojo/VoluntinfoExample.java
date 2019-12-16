@@ -314,73 +314,63 @@ public class VoluntinfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andTaskIsNull() {
-            addCriterion("task is null");
+        public Criteria andTaskidIsNull() {
+            addCriterion("taskid is null");
             return (Criteria) this;
         }
 
-        public Criteria andTaskIsNotNull() {
-            addCriterion("task is not null");
+        public Criteria andTaskidIsNotNull() {
+            addCriterion("taskid is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTaskEqualTo(String value) {
-            addCriterion("task =", value, "task");
+        public Criteria andTaskidEqualTo(Integer value) {
+            addCriterion("taskid =", value, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskNotEqualTo(String value) {
-            addCriterion("task <>", value, "task");
+        public Criteria andTaskidNotEqualTo(Integer value) {
+            addCriterion("taskid <>", value, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskGreaterThan(String value) {
-            addCriterion("task >", value, "task");
+        public Criteria andTaskidGreaterThan(Integer value) {
+            addCriterion("taskid >", value, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskGreaterThanOrEqualTo(String value) {
-            addCriterion("task >=", value, "task");
+        public Criteria andTaskidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("taskid >=", value, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskLessThan(String value) {
-            addCriterion("task <", value, "task");
+        public Criteria andTaskidLessThan(Integer value) {
+            addCriterion("taskid <", value, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskLessThanOrEqualTo(String value) {
-            addCriterion("task <=", value, "task");
+        public Criteria andTaskidLessThanOrEqualTo(Integer value) {
+            addCriterion("taskid <=", value, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskLike(String value) {
-            addCriterion("task like", value, "task");
+        public Criteria andTaskidIn(List<Integer> values) {
+            addCriterion("taskid in", values, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskNotLike(String value) {
-            addCriterion("task not like", value, "task");
+        public Criteria andTaskidNotIn(List<Integer> values) {
+            addCriterion("taskid not in", values, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskIn(List<String> values) {
-            addCriterion("task in", values, "task");
+        public Criteria andTaskidBetween(Integer value1, Integer value2) {
+            addCriterion("taskid between", value1, value2, "taskid");
             return (Criteria) this;
         }
 
-        public Criteria andTaskNotIn(List<String> values) {
-            addCriterion("task not in", values, "task");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskBetween(String value1, String value2) {
-            addCriterion("task between", value1, value2, "task");
-            return (Criteria) this;
-        }
-
-        public Criteria andTaskNotBetween(String value1, String value2) {
-            addCriterion("task not between", value1, value2, "task");
+        public Criteria andTaskidNotBetween(Integer value1, Integer value2) {
+            addCriterion("taskid not between", value1, value2, "taskid");
             return (Criteria) this;
         }
 
