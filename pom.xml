@@ -12,7 +12,7 @@
     <artifactId>metting-v1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>metting-v1</name>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>runtime</scope>
+            <scope>provided</scope>
         </dependency>
 <!--        swagger2-->
 

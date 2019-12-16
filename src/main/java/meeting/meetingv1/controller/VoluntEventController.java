@@ -75,6 +75,7 @@ public class VoluntEventController {
         userMeetingService.addRelation(new UserMeeting(null,Check.getUserID(request),meetingId,b));
         return ResultBean.success();
     }
+
     @GetMapping("joinVolunteer/{meetingId}")
     @UserLoginToken
     @ApiOperation(value = "会议发起者查看申请志愿者的信息",notes = "参数： <br>1、会议id meetingId <br>2、登陆token <br>数据部分的info是用户和会议的对应信息，当然这里只有会议的组织者才能查看")

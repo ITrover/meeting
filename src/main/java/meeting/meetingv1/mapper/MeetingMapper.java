@@ -2,9 +2,7 @@ package meeting.meetingv1.mapper;
 
 import meeting.meetingv1.pojo.Meeting;
 import meeting.meetingv1.pojo.MeetingExample;
-import org.apache.ibatis.annotations.Select;
 
-import java.util.Date;
 import java.util.Date;
 import java.util.List;
 
@@ -65,6 +63,7 @@ public interface MeetingMapper {
      */
     int updateByPrimaryKey(Meeting record);
 
+
     /*
      *
      *首页分页
@@ -73,8 +72,7 @@ public interface MeetingMapper {
 
     List<Meeting> selectMeetings(int offset, int limit, int orderMode, Date date);
     /*
-    * 查询行数
-    * */
+     * 查询行数
+     * */
     int selectMeetingRows();
-
 }

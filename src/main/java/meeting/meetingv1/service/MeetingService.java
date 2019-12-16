@@ -36,7 +36,7 @@ public class MeetingService {
             throw new IllegalArgumentException("参数不能为空!");
         }
         int result = meetingMapper.insert(meeting);
-        return result;
+        return meeting.getMeetingid();//更新：返回插入的会议ID
     }
 
     public Meeting findById(int id) {

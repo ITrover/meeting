@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,8 @@ public class FileUploadController {
     private String UPLOAD_PATH;
     @Value("${meeting.filePath.root}")
     private String meetingFileRootPath;
+    @Value("${meeting.filePath.defultGuestImg}")
+    private String defaultGuestImgPath;
     private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     UserService userService;
@@ -70,6 +73,27 @@ public class FileUploadController {
             return ResultBean.error(-8,"文件保存失败");
         }
     }
+    @ApiOperation(value = "获取用户头像",notes = "参数： <br>1、文件名")
+    @GetMapping(value = "/userIcon/{filename}")
+    public void getMeetIcon(@PathVariable String filename, HttpServletResponse response) throws IOException {
+
+        OutputStream outputStream = response.getOutputStream();
+        File file = new File(UPLOAD_PATH + "/" + filename);
+        if (!file.exists()){
+            file = new File(defaultGuestImgPath);
+            response.setContentType("image/jpeg");
+        }
+        if (filename.contains("png")){
+            response.setContentType("image/png");
+        } else if (filename.contains("jpg") || filename.contains("jpeg")){
+            response.setContentType("image/jpeg");
+        }
+        FileInputStream stream = new FileInputStream(file);
+        byte[] bytes = new byte[stream.available()];
+        stream.read(bytes,0,stream.available());
+        response.getOutputStream().write(bytes);
+    }
+
     @UserLoginToken
     @PostMapping("/file")
     @ApiOperation(value = "上传一个会议相关文件",notes = "参数： <br>1、会议ID meetingId  <br>2、文件上传时name应为file  <br>3、登陆token  <br> 注意：上传同名文件将覆盖旧文件")

@@ -33,6 +33,14 @@ public class UserMeetingService {
         userMeetingMapper.insert(userMeeting);
         return true;
     }
+    public boolean addRelation(UserMeeting userMeeting,boolean creat) throws ParameterException {
+        if (userMeeting.getType() != 1){
+            throw new ParameterException();
+        }
+        userMeetingMapper.insert(userMeeting);
+        return true;
+    }
+
     //i 1 为申请志愿者
     public boolean addRelation(UserMeeting userMeeting,int i) throws ParameterException {
         userMeetingMapper.insert(userMeeting);

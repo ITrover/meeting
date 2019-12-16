@@ -1,22 +1,23 @@
 package meeting.meetingv1.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.ParameterException;
-import meeting.meetingv1.pojo.Guest;
-import meeting.meetingv1.pojo.Meeting;
-import meeting.meetingv1.pojo.User;
-import meeting.meetingv1.pojo.Volunt;
-import meeting.meetingv1.service.GuestService;
-import meeting.meetingv1.service.MeetingService;
-import meeting.meetingv1.service.VoluntEventService;
+import meeting.meetingv1.pojo.*;
+import meeting.meetingv1.service.*;
+import meeting.meetingv1.util.Check;
 import meeting.meetingv1.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 
 @Controller
@@ -28,22 +29,90 @@ public class MeetingController {
     VoluntEventService voluntService;
     @Autowired
     GuestService guestService;
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    VoTaskService voTaskService;
+    @Autowired
+    MeetingTypeService meetingTypeService;
+    @Autowired
+    UserMeetingService userMeetingService;
+
+    Byte CREAT_RELATION = 1;
+    @ResponseBody
+    @GetMapping("meetingTypes")
+    public ResultBean getType(){
+        Map<String,List> map = new HashMap<>();
+        map.put("types",meetingTypeService.getTypes());
+        return ResultBean.success(map);
+    }
+
 
     //还没测试
     @ResponseBody
+    @UserLoginToken
     @RequestMapping(path = "meeting/add", method = RequestMethod.POST)
-    public ResultBean publishMeeting(Meeting meeting, Volunt volunt, ArrayList<Guest> guests) throws ParameterException {
+    public ResultBean publishMeeting(Meeting meeting, Volunt volunt, ArrayList<Guest> guests,
+    HttpServletRequest request
+    ) throws ParameterException {
         System.out.println(meeting+""+volunt+guests);
 //        System.out.println(meeting+" "+volunt+guests);
-        meetingService.addMeeting(meeting);
+        int meetingId = meetingService.addMeeting(meeting);
         voluntService.addVoluntEvent(volunt);
         for (int i = 0; i < guests.size(); i++) {
+            guests.get(i).setMeetingid(meetingId);
             guestService.addGuest(guests.get(i));
         }
+        //增加关系
+        userMeetingService.addRelation(new UserMeeting(null, Check.getUserID(request),meetingId,CREAT_RELATION));
 //        guestService.addguest(guests);
         return ResultBean.success();
     }
 
+    /**
+     * 对应手机端的请求，日期格式：yyyy-MM-dd HH:mm:ss
+     * @param meeting
+     * @return
+     * @throws ParameterException
+     */
+    @ResponseBody
+    @UserLoginToken
+    @RequestMapping(path = "meeting/put", method = RequestMethod.POST)
+    @ApiOperation(value = "添加会议信息（文本部分）",notes =
+            "参数： <br>1、会议实体：{\"meetingid\":null,\"mName\":null,\"location\":null," +
+                    "<br>\"startTime\":null,\"closeTime\":null,\"introduction\":null," +
+                    "<br>\"schedule\":null,\"needvolunteer\":null,\"typeid\":null,\"organizer\":null," +
+                    "<br>\"hostedby\":null,\"communicate\":null}\n" +
+                    "<br><a href=\"http://www.ljhhhx.com/meetingInfo.png\">注释截图</a><br>" +
+                    "其中meetingid不用传，mName、location、introduction必须有，时间的字符串格式为：yyyy-MM-dd HH:mm:ss <br>" +
+                    "2、会议任务的json字符串 introduction <br>" +
+                    "两个任务的数组json例子：[{\"taskinfo\":\"测试是的 的的的的\",\"workingtime\":8,\"numbers\":2},{\"taskinfo\":\"测试是的 的的的的\",\"workingtime\":8,\"numbers\":2}]" +
+                    "<br>注意：此处为原始字符串，在Http标准中不允许请求出现‘{’‘}’等字符，需要将原始字符串再使用utf-8编码一次<br>" +
+                    "编码后的例子(实际作为参数的字符串，显示不全F12看元素吧)：<br>" +
+                    "%5B%7B%22taskid%22%3Anull%2C%22meetid%22%3Anull%2C%22taskinfo%22%3A%22%E6%B5%8B%E8%AF%95%E6%98%AF%E7%9A%84+%E7%9A%84%E7%9A%84%E7%9A%84%E7%9A%84%22%2C%22workingtime%22%3A8%2C%22numbers%22%3A2%7D%2C%7B%22taskid%22%3Anull%2C%22meetid%22%3Anull%2C%22taskinfo%22%3A%22%E6%B5%8B%E8%AF%95%E6%98%AF%E7%9A%84+%E7%9A%84%E7%9A%84%E7%9A%84%E7%9A%84%22%2C%22workingtime%22%3A8%2C%22numbers%22%3A2%7D%5D" +
+                    "3、登陆token"
+    )
+    public ResultBean publishMeeting2(
+            Meeting meeting,
+            String taskjson,
+            HttpServletRequest request
+            ) throws ParameterException, JsonProcessingException, UnsupportedEncodingException {
+        Integer meetingId = meetingService.addMeeting(meeting);
+        String decode = URLDecoder.decode(taskjson, "utf-8");
+        Voluntask[] tasks = objectMapper.readValue(decode, Voluntask[].class);
+        voTaskService.addTask(tasks,meetingId);
+        userMeetingService.addRelation(new UserMeeting(null, Check.getUserID(request),meetingId,CREAT_RELATION),true);
+        Map<String,Integer> map = new HashMap<>();
+        map.put("meetingId",meeting.getMeetingid());
+        return ResultBean.success(map);
+    }
+//[{"taskinfo":"测试是的 的的的的","workingtime":8,"numbers":2},{"taskinfo":"测试是的 的的的的","workingtime":8,"numbers":2}]
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     //    通过id得到会议详情页1
     @ApiOperation(value = "根据会议id得到会议详细信息",notes = "参数： <br>1、会议ID meetingId   " )
     @ResponseBody
@@ -60,8 +129,8 @@ public class MeetingController {
     }
 
     //测试请求1
-    @ResponseBody
-    @RequestMapping(path = "/hello1", method = RequestMethod.POST)
+//    @ResponseBody
+//    @RequestMapping(path = "/hello1", method = RequestMethod.POST)
     public ResultBean hello(Meeting meeting) {
         System.out.println(meeting);
         Map guestHashMap = new HashMap<>();
@@ -75,7 +144,7 @@ public class MeetingController {
 
 //    分页获取首页会议1
 
-    @ApiOperation(value = "根据会议首页分页的会议数据",notes = "参数: ")
+    @ApiOperation(value = "根据会议首页分页的会议数据",notes = "参数: 1.起始位置 offset 2. 条数 limit")
     @ResponseBody
     @RequestMapping(path = "/meetings/home", method = RequestMethod.GET)
     public ResultBean findMeetings(int offset, int limit) {

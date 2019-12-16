@@ -6,11 +6,18 @@ import meeting.meetingv1.MQ.Event;
 import meeting.meetingv1.MQ.VolunStatusInfo;
 import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.pojo.*;
+import meeting.meetingv1.service.MeetingService;
 import meeting.meetingv1.service.UserMeetingService;
 import meeting.meetingv1.MQ.KafkaSender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 public class DaoTest {
@@ -97,18 +104,54 @@ public class DaoTest {
     }
     @Autowired
     ObjectMapper objectMapper;
-//    @Test
-    void ceshiJs() throws JsonProcessingException {
-        Event event = new Event();
+    @Test
+    void ceshiJs() throws JsonProcessingException, UnsupportedEncodingException {
+//        Event event = new Event();
 //        event.setMessage(new Message(null, 0, 1, 2, "测试消息"));
 //        ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(event);
+        List<Voluntask> strings = new ArrayList<>();
+        Voluntask voluntask = new Voluntask();
+        voluntask.setTaskinfo("a2s1d2ass1d2as1d21");
+        voluntask.setNumbers(2);
+        voluntask.setWorkingtime(8);
+        strings.add(voluntask);
+        voluntask.setTaskinfo("测试是的 的的的的");
+        voluntask.setNumbers(2);
+        voluntask.setWorkingtime(8);
+        strings.add(voluntask);
 
+        String json = objectMapper.writeValueAsString(strings);
         System.out.println(json);
+        String encode = URLEncoder.encode(json, "utf-8");
+        System.out.println(encode);
+        System.out.println(URLDecoder.decode(encode,"utf-8"));
 
-        Event event1 = objectMapper.readValue(json, Event.class);
-        System.out.println(event1.getMessage().getContent());
-        System.out.println(event1.getMessage());
+        String json2 = "[{\"taskinfo\":\"测试是的 的的的的\",\"workingtime\":8,\"numbers\":2},{\"taskinfo\":\"测试是的 的的的的\",\"workingtime\":8,\"numbers\":2}]";
+
+        Voluntask[] event1 = objectMapper.readValue(json, Voluntask[].class);
+        System.out.println(event1.length);
+//        System.out.println(event1.getMessage().getContent());
+//        System.out.println(event1.getMessage());
+    }
+    @Autowired
+    MeetingService service;
+    @Test
+    void name4() {
+        Meeting meeting = new Meeting();
+        meeting.setmName("asdasd");
+        meeting.setLocation("测试地点");
+        meeting.setIntroduction("sddsfsdf");
+        meeting.setNeedvolunteer(1);
+        service.addMeeting(meeting);
+        System.out.println(meeting.getMeetingid()
+        );
+    }
+
+    @Test
+    void name5() throws JsonProcessingException {
+        Meeting meeting = new Meeting();
+        String json = objectMapper.writeValueAsString(meeting);
+        System.out.println(json);
     }
 }
 

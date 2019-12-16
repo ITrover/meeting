@@ -774,6 +774,216 @@ public class MeetingExample {
             addCriterion("typeid not between", value1, value2, "typeid");
             return (Criteria) this;
         }
+
+        public Criteria andOrganizerIsNull() {
+            addCriterion("organizer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerIsNotNull() {
+            addCriterion("organizer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerEqualTo(String value) {
+            addCriterion("organizer =", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerNotEqualTo(String value) {
+            addCriterion("organizer <>", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerGreaterThan(String value) {
+            addCriterion("organizer >", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerGreaterThanOrEqualTo(String value) {
+            addCriterion("organizer >=", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerLessThan(String value) {
+            addCriterion("organizer <", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerLessThanOrEqualTo(String value) {
+            addCriterion("organizer <=", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerLike(String value) {
+            addCriterion("organizer like", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerNotLike(String value) {
+            addCriterion("organizer not like", value, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerIn(List<String> values) {
+            addCriterion("organizer in", values, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerNotIn(List<String> values) {
+            addCriterion("organizer not in", values, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerBetween(String value1, String value2) {
+            addCriterion("organizer between", value1, value2, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrganizerNotBetween(String value1, String value2) {
+            addCriterion("organizer not between", value1, value2, "organizer");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyIsNull() {
+            addCriterion("hostedby is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyIsNotNull() {
+            addCriterion("hostedby is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyEqualTo(String value) {
+            addCriterion("hostedby =", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyNotEqualTo(String value) {
+            addCriterion("hostedby <>", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyGreaterThan(String value) {
+            addCriterion("hostedby >", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyGreaterThanOrEqualTo(String value) {
+            addCriterion("hostedby >=", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyLessThan(String value) {
+            addCriterion("hostedby <", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyLessThanOrEqualTo(String value) {
+            addCriterion("hostedby <=", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyLike(String value) {
+            addCriterion("hostedby like", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyNotLike(String value) {
+            addCriterion("hostedby not like", value, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyIn(List<String> values) {
+            addCriterion("hostedby in", values, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyNotIn(List<String> values) {
+            addCriterion("hostedby not in", values, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyBetween(String value1, String value2) {
+            addCriterion("hostedby between", value1, value2, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andHostedbyNotBetween(String value1, String value2) {
+            addCriterion("hostedby not between", value1, value2, "hostedby");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateIsNull() {
+            addCriterion("communicate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateIsNotNull() {
+            addCriterion("communicate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateEqualTo(String value) {
+            addCriterion("communicate =", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateNotEqualTo(String value) {
+            addCriterion("communicate <>", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateGreaterThan(String value) {
+            addCriterion("communicate >", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateGreaterThanOrEqualTo(String value) {
+            addCriterion("communicate >=", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateLessThan(String value) {
+            addCriterion("communicate <", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateLessThanOrEqualTo(String value) {
+            addCriterion("communicate <=", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateLike(String value) {
+            addCriterion("communicate like", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateNotLike(String value) {
+            addCriterion("communicate not like", value, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateIn(List<String> values) {
+            addCriterion("communicate in", values, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateNotIn(List<String> values) {
+            addCriterion("communicate not in", values, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateBetween(String value1, String value2) {
+            addCriterion("communicate between", value1, value2, "communicate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommunicateNotBetween(String value1, String value2) {
+            addCriterion("communicate not between", value1, value2, "communicate");
+            return (Criteria) this;
+        }
     }
 
     /**
