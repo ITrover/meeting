@@ -22,6 +22,15 @@ public class VoUserTaskInfoService {
     VoluntinfoMapper voluntinfoMapper;
     @Autowired
     VoluntaskMapper voluntaskMapper;
+    public List<Voluntinfo> getTaskInfo(Integer userId,Integer mettingId){
+        VoluntinfoExample example = new VoluntinfoExample();
+        VoluntinfoExample.Criteria criteria = example.createCriteria();
+        criteria.andUseridEqualTo(userId);
+        criteria.andMeetingidEqualTo(mettingId);
+
+        return voluntinfoMapper.selectByExample(example);
+    }
+
     public List<UserTaskBean> getMyTaskInfo(Integer userId){
         VoluntinfoExample example = new VoluntinfoExample();
         VoluntinfoExample.Criteria criteria = example.createCriteria();
