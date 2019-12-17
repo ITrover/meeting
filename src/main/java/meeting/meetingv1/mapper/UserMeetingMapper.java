@@ -69,4 +69,9 @@ public interface UserMeetingMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(UserMeeting record);
+
+    @Select("select type from user_meeting where userid = #{userId} and meetingid = #{meetingId} and (type = 4 or type = 5 or type = 6)")
+    int getVoluntTypeFlag(Integer userId, Integer meetingId);
+
+
 }

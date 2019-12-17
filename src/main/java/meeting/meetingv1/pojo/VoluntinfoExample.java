@@ -384,52 +384,62 @@ public class VoluntinfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andStudentidEqualTo(Integer value) {
+        public Criteria andStudentidEqualTo(String value) {
             addCriterion("studentid =", value, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidNotEqualTo(Integer value) {
+        public Criteria andStudentidNotEqualTo(String value) {
             addCriterion("studentid <>", value, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidGreaterThan(Integer value) {
+        public Criteria andStudentidGreaterThan(String value) {
             addCriterion("studentid >", value, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andStudentidGreaterThanOrEqualTo(String value) {
             addCriterion("studentid >=", value, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidLessThan(Integer value) {
+        public Criteria andStudentidLessThan(String value) {
             addCriterion("studentid <", value, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidLessThanOrEqualTo(Integer value) {
+        public Criteria andStudentidLessThanOrEqualTo(String value) {
             addCriterion("studentid <=", value, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidIn(List<Integer> values) {
+        public Criteria andStudentidLike(String value) {
+            addCriterion("studentid like", value, "studentid");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentidNotLike(String value) {
+            addCriterion("studentid not like", value, "studentid");
+            return (Criteria) this;
+        }
+
+        public Criteria andStudentidIn(List<String> values) {
             addCriterion("studentid in", values, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidNotIn(List<Integer> values) {
+        public Criteria andStudentidNotIn(List<String> values) {
             addCriterion("studentid not in", values, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidBetween(Integer value1, Integer value2) {
+        public Criteria andStudentidBetween(String value1, String value2) {
             addCriterion("studentid between", value1, value2, "studentid");
             return (Criteria) this;
         }
 
-        public Criteria andStudentidNotBetween(Integer value1, Integer value2) {
+        public Criteria andStudentidNotBetween(String value1, String value2) {
             addCriterion("studentid not between", value1, value2, "studentid");
             return (Criteria) this;
         }
@@ -444,52 +454,62 @@ public class VoluntinfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andPersonidEqualTo(Integer value) {
+        public Criteria andPersonidEqualTo(String value) {
             addCriterion("personid =", value, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidNotEqualTo(Integer value) {
+        public Criteria andPersonidNotEqualTo(String value) {
             addCriterion("personid <>", value, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidGreaterThan(Integer value) {
+        public Criteria andPersonidGreaterThan(String value) {
             addCriterion("personid >", value, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidGreaterThanOrEqualTo(Integer value) {
+        public Criteria andPersonidGreaterThanOrEqualTo(String value) {
             addCriterion("personid >=", value, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidLessThan(Integer value) {
+        public Criteria andPersonidLessThan(String value) {
             addCriterion("personid <", value, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidLessThanOrEqualTo(Integer value) {
+        public Criteria andPersonidLessThanOrEqualTo(String value) {
             addCriterion("personid <=", value, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidIn(List<Integer> values) {
+        public Criteria andPersonidLike(String value) {
+            addCriterion("personid like", value, "personid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonidNotLike(String value) {
+            addCriterion("personid not like", value, "personid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonidIn(List<String> values) {
             addCriterion("personid in", values, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidNotIn(List<Integer> values) {
+        public Criteria andPersonidNotIn(List<String> values) {
             addCriterion("personid not in", values, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidBetween(Integer value1, Integer value2) {
+        public Criteria andPersonidBetween(String value1, String value2) {
             addCriterion("personid between", value1, value2, "personid");
             return (Criteria) this;
         }
 
-        public Criteria andPersonidNotBetween(Integer value1, Integer value2) {
+        public Criteria andPersonidNotBetween(String value1, String value2) {
             addCriterion("personid not between", value1, value2, "personid");
             return (Criteria) this;
         }

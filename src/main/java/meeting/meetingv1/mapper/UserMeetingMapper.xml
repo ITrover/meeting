@@ -53,6 +53,7 @@
     -->
     id, userid, meetingid, type
   </sql>
+
   <select id="selectByExample" parameterType="meeting.meetingv1.pojo.UserMeetingExample" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
@@ -164,4 +165,5 @@
       type = #{type,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

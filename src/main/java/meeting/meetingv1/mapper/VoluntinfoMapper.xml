@@ -10,8 +10,8 @@
       <idArg column="userid" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="meetingid" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="taskid" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="studentid" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="personid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="studentid" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="personid" javaType="java.lang.String" jdbcType="VARCHAR" />
     </constructor>
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -98,7 +98,7 @@
     insert into voluntinfo (userid, meetingid, taskid, 
       studentid, personid)
     values (#{userid,jdbcType=INTEGER}, #{meetingid,jdbcType=INTEGER}, #{taskid,jdbcType=INTEGER}, 
-      #{studentid,jdbcType=INTEGER}, #{personid,jdbcType=INTEGER})
+      #{studentid,jdbcType=VARCHAR}, #{personid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="meeting.meetingv1.pojo.Voluntinfo">
     <!--
@@ -134,10 +134,10 @@
         #{taskid,jdbcType=INTEGER},
       </if>
       <if test="studentid != null">
-        #{studentid,jdbcType=INTEGER},
+        #{studentid,jdbcType=VARCHAR},
       </if>
       <if test="personid != null">
-        #{personid,jdbcType=INTEGER},
+        #{personid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -155,10 +155,10 @@
         taskid = #{taskid,jdbcType=INTEGER},
       </if>
       <if test="studentid != null">
-        studentid = #{studentid,jdbcType=INTEGER},
+        studentid = #{studentid,jdbcType=VARCHAR},
       </if>
       <if test="personid != null">
-        personid = #{personid,jdbcType=INTEGER},
+        personid = #{personid,jdbcType=VARCHAR},
       </if>
     </set>
     where userid = #{userid,jdbcType=INTEGER}
@@ -171,8 +171,8 @@
     update voluntinfo
     set meetingid = #{meetingid,jdbcType=INTEGER},
       taskid = #{taskid,jdbcType=INTEGER},
-      studentid = #{studentid,jdbcType=INTEGER},
-      personid = #{personid,jdbcType=INTEGER}
+      studentid = #{studentid,jdbcType=VARCHAR},
+      personid = #{personid,jdbcType=VARCHAR}
     where userid = #{userid,jdbcType=INTEGER}
   </update>
 </mapper>

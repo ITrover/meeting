@@ -7,16 +7,24 @@ import java.util.List;
 
 //志愿者信息的集成类
 public class UserTaskBean {
+    private Integer typeFlag;
     private Voluntinfo voluntinfo;
     private Voluntask myTask;
 
-
-    public UserTaskBean(Voluntinfo voluntinfo,Voluntask myTask ) {
-        this.myTask = myTask;
-        this.voluntinfo = voluntinfo;
+    public Integer getTypeFlag() {
+        return typeFlag;
     }
 
-    public UserTaskBean() {
+    public void setTypeFlag(Integer typeFlag) {
+        this.typeFlag = typeFlag;
+    }
+
+    public Voluntinfo getVoluntinfo() {
+        return voluntinfo;
+    }
+
+    public void setVoluntinfo(Voluntinfo voluntinfo) {
+        this.voluntinfo = voluntinfo;
     }
 
     public Voluntask getMyTask() {
@@ -27,11 +35,12 @@ public class UserTaskBean {
         this.myTask = myTask;
     }
 
-    public Voluntinfo getVoluntinfo() {
-        return voluntinfo;
+    public UserTaskBean() {
     }
 
-    public void setVoluntinfo(Voluntinfo voluntinfo) {
+    public UserTaskBean(Integer typeFlag, Voluntinfo voluntinfo, Voluntask myTask) {
+        this.typeFlag = typeFlag;
         this.voluntinfo = voluntinfo;
+        this.myTask = myTask;
     }
 }

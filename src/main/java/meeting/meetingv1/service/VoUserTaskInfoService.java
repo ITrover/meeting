@@ -1,5 +1,6 @@
 package meeting.meetingv1.service;
 
+import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.mapper.VoluntaskMapper;
 import meeting.meetingv1.mapper.VoluntinfoMapper;
 import meeting.meetingv1.pojo.Voluntask;
@@ -14,19 +15,28 @@ import java.util.List;
 @Service
 public class VoUserTaskInfoService {
     @Autowired
+    UserMeetingService userMeetingService;
+    @Autowired
+    UserMeetingMapper userMeetingMapper;
+    @Autowired
     VoluntinfoMapper voluntinfoMapper;
     @Autowired
     VoluntaskMapper voluntaskMapper;
-    public List<Voluntinfo> getMyTaskInfo(Integer userId){
+    public List<UserTaskBean> getMyTaskInfo(Integer userId){
         VoluntinfoExample example = new VoluntinfoExample();
         VoluntinfoExample.Criteria criteria = example.createCriteria();
         criteria.andUseridEqualTo(userId);
         List<Voluntinfo> voluntinfos = voluntinfoMapper.selectByExample(example);
         List<UserTaskBean> userTaskBeans = new ArrayList<>();
         for (Voluntinfo voluntInfo : voluntinfos){
-            userTaskBeans.add(new UserTaskBean(voluntInfo,voluntaskMapper.selectByPrimaryKey(voluntInfo.getTaskid())));
+            userTaskBeans.add(
+                    new UserTaskBean(
+                            userMeetingMapper.getVoluntTypeFlag(userId,voluntInfo.getMeetingid()),
+                            voluntInfo,
+                            voluntaskMapper.selectByPrimaryKey(voluntInfo.getTaskid())
+                    ));
         }
-        return voluntinfos;
+        return userTaskBeans;
     }
     public void add(Voluntinfo voluntinfo){
         if (voluntinfo.getTaskid() != null && voluntinfo.getPersonid() != null && voluntinfo.getStudentid() != null)

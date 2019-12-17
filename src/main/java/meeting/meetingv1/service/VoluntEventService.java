@@ -12,6 +12,8 @@ public class VoluntEventService {
     @Autowired
     VoluntMapper voluntMapper;
 
+
+
     public boolean addVoluntEvent(Volunt volunt) throws ParameterException {
         try {
             voluntMapper.insert(volunt);

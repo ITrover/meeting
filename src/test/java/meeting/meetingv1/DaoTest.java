@@ -2,13 +2,13 @@ package meeting.meetingv1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import meeting.meetingv1.MQ.Event;
-import meeting.meetingv1.MQ.VolunStatusInfo;
 import meeting.meetingv1.exception.ParameterException;
+import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.pojo.*;
 import meeting.meetingv1.service.MeetingService;
 import meeting.meetingv1.service.UserMeetingService;
 import meeting.meetingv1.MQ.KafkaSender;
+import meeting.meetingv1.service.VoUserTaskInfoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -104,7 +104,7 @@ public class DaoTest {
     }
     @Autowired
     ObjectMapper objectMapper;
-    @Test
+//    @Test
     void ceshiJs() throws JsonProcessingException, UnsupportedEncodingException {
 //        Event event = new Event();
 //        event.setMessage(new Message(null, 0, 1, 2, "测试消息"));
@@ -135,7 +135,7 @@ public class DaoTest {
     }
     @Autowired
     MeetingService service;
-    @Test
+//    @Test
     void name4() {
         Meeting meeting = new Meeting();
         meeting.setmName("asdasd");
@@ -146,12 +146,18 @@ public class DaoTest {
         System.out.println(meeting.getMeetingid()
         );
     }
-
+    @Autowired
+    UserMeetingMapper userMeetingMapper;
+    @Autowired
+    VoUserTaskInfoService voUserTaskInfoService;
     @Test
     void name5() throws JsonProcessingException {
-        Meeting meeting = new Meeting();
-        String json = objectMapper.writeValueAsString(meeting);
-        System.out.println(json);
+//        Meeting meeting = new Meeting();
+//        String json = objectMapper.writeValueAsString(meeting);
+//        System.out.println(json);
+//        System.out.println(userMeetingMapper.getVoluntTypeFlag(17,24));
+        System.out.println(
+                objectMapper.writeValueAsString(voUserTaskInfoService.getMyTaskInfo(17)));
     }
 }
 

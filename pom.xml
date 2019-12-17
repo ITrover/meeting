@@ -11,7 +11,7 @@
     <groupId>Meeting</groupId>
     <artifactId>metting-v1</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>metting-v1</name>
+    <name>meeting-v1</name>
     <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
 

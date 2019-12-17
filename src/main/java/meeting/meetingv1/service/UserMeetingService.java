@@ -50,6 +50,13 @@ public class UserMeetingService {
         userMeetingMapper.delete(userMeeting);
         return true;
     }
+    public List<UserMeeting> findUserMeetingInfo(Integer userId){
+        UserMeetingExample userMeetingExample = new UserMeetingExample();
+        UserMeetingExample.Criteria criteria = userMeetingExample.createCriteria();
+        criteria.andUseridEqualTo(userId);
+        List<UserMeeting> list = userMeetingMapper.selectByExample(userMeetingExample);
+        return list;
+    }
     public List<UserMeeting> findPreferenceByUser(Integer userId, Byte type){
         UserMeetingExample userMeetingExample = new UserMeetingExample();
         UserMeetingExample.Criteria criteria = userMeetingExample.createCriteria();
