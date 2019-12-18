@@ -33,7 +33,7 @@ public class VoluntTaskController {
     UserMeetingService userMeetingService;
     @Autowired
     VoluntEventService voluntEventService;
-    @GetMapping("tasks/{meetingId}")
+    @GetMapping("tasks/my/all")
     @ApiOperation(value = "获取用户申请的的志愿工作详情" ,notes = "" +
             "<br>参数：1. 登陆token" +
             "<br>返回数组中每一个元素是对应的志愿申请状态typeFlag、志愿者信息voluntinfo、工作信息myTask，例子：" +
@@ -76,3 +76,4 @@ public class VoluntTaskController {
     }
 
 }
+
