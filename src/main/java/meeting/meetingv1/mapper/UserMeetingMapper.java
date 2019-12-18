@@ -74,4 +74,6 @@ public interface UserMeetingMapper {
     int getVoluntTypeFlag(Integer userId, Integer meetingId);
 
 
+    List<UserMeeting> getVolunteers(Integer meetingId);
+
 }

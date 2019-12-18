@@ -165,5 +165,8 @@
       type = #{type,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-
+<!--  自定义SQL 查询志愿关系-->
+<select id="getVolunteers" parameterType = "java.lang.Integer" resultMap="BaseResultMap">
+  select * from user_meeting where meetingid = #{meetingId} and (type = 4 or type = 5 or type = 6)
+</select>
 </mapper>

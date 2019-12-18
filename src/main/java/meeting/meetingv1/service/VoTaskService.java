@@ -26,4 +26,7 @@ public class VoTaskService {
 
         return voluntaskMapper.selectByExample(voluntaskExample);
     }
+    public Voluntask getTaskByID(Integer taskId){
+        return voluntaskMapper.selectByPrimaryKey(taskId);
+    }
 }

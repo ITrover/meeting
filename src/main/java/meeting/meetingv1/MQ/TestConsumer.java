@@ -48,7 +48,6 @@ public class TestConsumer {
             mailService.SendToMail(userById.getEmailaddr(),message.getContent());
             msgService.sendMsg(message);
         }
-//        System.out.println("收到信息 ： "+record.value());
     }
     @KafkaListener(topics = "VolunStatusInfo")
     public void listen(ConsumerRecord record) throws JsonProcessingException {

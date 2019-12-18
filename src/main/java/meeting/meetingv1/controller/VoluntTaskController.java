@@ -63,5 +63,16 @@ public class VoluntTaskController {
         map.put("tasks",voUserTaskInfoService.getMyTaskInfo(userId));
         return ResultBean.success(map);
     }
+    @GetMapping("tasks/all/{meetingId}")
+    @ApiOperation(value = "",
+            notes = "参数：<br>1. meetingId"
+    )
+    @UserLoginToken
+    public ResultBean getAllTasks(@PathVariable Integer meetingId, HttpServletRequest request){
+        Integer userId = Check.getUserID(request);
+        Map<String,List> map = new HashMap<>();
+        map.put("tasks",voUserTaskInfoService.getMyTaskInfo(userId));
+        return ResultBean.success(map);
+    }
 
 }

@@ -9,10 +9,8 @@ import meeting.meetingv1.MQ.SendToMany;
 import meeting.meetingv1.MQ.VolunStatusInfo;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.ParameterException;
-import meeting.meetingv1.pojo.Message;
-import meeting.meetingv1.pojo.UserMeeting;
-import meeting.meetingv1.pojo.Volunt;
-import meeting.meetingv1.pojo.Voluntinfo;
+import meeting.meetingv1.pojo.*;
+import meeting.meetingv1.pojo.mybeans.VolunteerInfo;
 import meeting.meetingv1.service.*;
 import meeting.meetingv1.util.Check;
 import meeting.meetingv1.util.ResultBean;
@@ -23,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,13 +36,23 @@ public class VoluntEventController {
     @Autowired
     VoUserTaskInfoService voUserTaskInfoService;
     @Autowired
+    VoTaskService voTaskService;
+    @Autowired
     KafkaSender kafkaSender;
     @Autowired
     ObjectMapper objectMapper;
 
-    @GetMapping("volunt")
+    @GetMapping("volunt/{meetingId}")
     @ApiOperation(value = "获取会议志愿活动信息",notes = "参数： 1、会议ID meetingId  <a href=\"http://www.ljhhhx.com/voluntInfo.png\">实体字段介绍截图</a>")
     public ResultBean getVoluntEventInfo(Integer meetingId){
+        Map<String, Volunt> map = new HashMap<>();
+
+        map.put("info",voluntEventService.getVoEventByMeetingId(meetingId));
+        return ResultBean.success(map);
+    }
+    @GetMapping("volunt/info/{meetingId}")
+    @ApiOperation(value = "获取会议志愿活动具体的工作内容信息",notes = "参数： 1、会议ID meetingId  <a href=\"http://www.ljhhhx.com/voluntInfo.png\">实体字段介绍截图</a>")
+    public ResultBean getVoTaskeInfo(Integer meetingId){
         Map<String, Volunt> map = new HashMap<>();
 
         map.put("info",voluntEventService.getVoEventByMeetingId(meetingId));
@@ -86,18 +95,54 @@ public class VoluntEventController {
     }
 
     @GetMapping("joinVolunteer/{meetingId}")
+//    @UserLoginToken
+    @ApiOperation(value = "会议发起者查看 会议-志愿关系 的关联 ",notes = "参数： <br>1、会议id meetingId <br>2、登陆token " +
+            "<br>" +
+            "<br>返回，type字段 4 志愿者 5 申请待批准 6 申请被拒绝 创建例子：" +
+            "<br>[{\"id\":86,\"userid\":17,\"meetingid\":24,\"type\":4},{\"id\":88,\"userid\":2,\"meetingid\":24,\"type\":5}]")
+    public ResultBean sayYES(@PathVariable Integer meetingId, HttpServletRequest request) throws JsonProcessingException {
+//        if (!(Check.checkUp(request,userMeetingService,meetingId)))
+//        {
+//            return ResultBean.error(-12,"无权限");
+//        }
+        Map<String, List> map = new HashMap<>();
+        List<UserMeeting> byMeet = userMeetingService.getVolunteers(meetingId);
+        System.out.println(objectMapper.writeValueAsString(byMeet));;
+        map.put("info",byMeet);
+        return ResultBean.success(map);
+    }
+    @GetMapping("volunteer/info/{meetingId}")
     @UserLoginToken
-    @ApiOperation(value = "会议发起者查看申请志愿者的信息",notes = "参数： <br>1、会议id meetingId <br>2、登陆token <br>数据部分的info是用户和会议的对应信息，当然这里只有会议的组织者才能查看")
-    public ResultBean sayYES(@PathVariable Integer meetingId, HttpServletRequest request){
+    @ApiOperation(value = "会议发起者查看申请志愿者的详细信息",notes = "参数： <br>1、会议id meetingId <br>2、登陆token <br>数据部分的info是用户和会议的对应信息，当然这里只有会议的组织者才能查看" +
+            "<br>返回例子：" +
+            "{\"code\":0,\"message\":\"success\",\"data\":{\"infos\":[{\"userId\":17,\"meetingId\":24,\"type\":4,\"taskId\":8,\"studentId\":\"123123\",\"personId\":\"500226218651\",\"taskInfo\":\"机场迎接嘉宾\"},{\"userId\":2,\"meetingId\":24,\"typeFlag\":5,\"taskId\":7,\"studentId\":\"2017210000\",\"personId\":\"123111111\",\"taskInfo\":\"会场管理\"}]}}"
+    )
+    public ResultBean getInfo(@PathVariable Integer meetingId, HttpServletRequest request) throws JsonProcessingException {
         if (!(Check.checkUp(request,userMeetingService,meetingId)))
         {
             return ResultBean.error(-12,"无权限");
         }
         Map<String, List> map = new HashMap<>();
-        List<UserMeeting> byMeet = userMeetingService.findPreferenceByMeet(meetingId, new Byte("4"));
-        map.put("info",byMeet);
+        List<VolunteerInfo> infos = new ArrayList<>();
+        List<UserMeeting> byMeet = userMeetingService.getVolunteers(meetingId);
+        for (UserMeeting userMeeting : byMeet){
+            List<Voluntinfo> taskInfo = voUserTaskInfoService.getTaskInfo(userMeeting.getUserid(), userMeeting.getMeetingid());
+            for (Voluntinfo voluntinfo :taskInfo){
+                Voluntask taskByID = voTaskService.getTaskByID(voluntinfo.getTaskid());
+                infos.add(new VolunteerInfo(voluntinfo.getUserid(),voluntinfo.getMeetingid(),userMeeting.getType(),
+                        voluntinfo.getTaskid(),
+                        voluntinfo.getStudentid(),
+                        voluntinfo.getPersonid(),
+                        taskByID.getTaskinfo()
+                        ));
+            }
+        }
+//        System.out.println(objectMapper.writeValueAsString(byMeet));;
+        map.put("infos",infos);
         return ResultBean.success(map);
     }
+
+
     @PostMapping("volunteerStatus/{meetingId}")
     @UserLoginToken
     @ApiOperation(value = "会议组织者通过或拒绝志愿者请求",notes =

@@ -40,6 +40,9 @@ public class UserMeetingService {
         userMeetingMapper.insert(userMeeting);
         return true;
     }
+    public List<UserMeeting> getVolunteers(Integer meetingId){
+         return userMeetingMapper.getVolunteers(meetingId);
+    }
 
     //i 1 为申请志愿者
     public boolean addRelation(UserMeeting userMeeting,int i) throws ParameterException {
@@ -65,11 +68,19 @@ public class UserMeetingService {
         List<UserMeeting> list = userMeetingMapper.selectByExample(userMeetingExample);
         return list;
     }
+    public List<UserMeeting> findPreferenceByMeet(Integer meetId){
+        UserMeetingExample userMeetingExample = new UserMeetingExample();
+        UserMeetingExample.Criteria criteria = userMeetingExample.createCriteria();
+        criteria.andMeetingidEqualTo(meetId);
+        List<UserMeeting> list = userMeetingMapper.selectByExample(userMeetingExample);
+        return list;
+    }
     public List<UserMeeting> findPreferenceByMeet(Integer meetId, Byte type){
         UserMeetingExample userMeetingExample = new UserMeetingExample();
         UserMeetingExample.Criteria criteria = userMeetingExample.createCriteria();
         criteria.andMeetingidEqualTo(meetId);
-        criteria.andTypeEqualTo(type);
+        criteria.andTypeEqualTo(type)
+        ;
         List<UserMeeting> list = userMeetingMapper.selectByExample(userMeetingExample);
         return list;
     }

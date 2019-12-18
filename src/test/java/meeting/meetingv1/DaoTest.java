@@ -152,12 +152,12 @@ public class DaoTest {
     VoUserTaskInfoService voUserTaskInfoService;
     @Test
     void name5() throws JsonProcessingException {
-//        Meeting meeting = new Meeting();
-//        String json = objectMapper.writeValueAsString(meeting);
-//        System.out.println(json);
-//        System.out.println(userMeetingMapper.getVoluntTypeFlag(17,24));
-        System.out.println(
-                objectMapper.writeValueAsString(voUserTaskInfoService.getMyTaskInfo(17)));
+        Meeting meeting = new Meeting();
+        String json = objectMapper.writeValueAsString(userMeetingMapper.getVolunteers(24));
+        System.out.println(json);
+        System.out.println();
+//        System.out.println(
+//                objectMapper.writeValueAsString(voUserTaskInfoService.getMyTaskInfo(17)));
     }
 }
 
