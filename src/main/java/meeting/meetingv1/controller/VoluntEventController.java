@@ -170,10 +170,13 @@ public class VoluntEventController {
     }
     @PostMapping("broadcast/{meetingId}")
     @UserLoginToken
-    @ApiOperation(value = "会议组织者向志愿者发送广播消息",notes = "参数： <br>1、会议id meetingId <br>2、登陆token <br>3. 消息内容 content <br>4 志愿者的状态类型 4:正在申请 5:通过申请")
+    @ApiOperation(value = "会议组织者向志愿者发送广播消息",notes = "参数： <br>1、会议id meetingId <br>2、登陆token <br>3. 消息内容 content <br>4 志愿者的状态类型 type  4:正在申请 5:通过申请")
     public ResultBean broadcast(@PathVariable Integer meetingId, HttpServletRequest request,String content,Integer type) throws ParameterException, JsonProcessingException {
-        if (!(Check.checkUp(request,userMeetingService,meetingId)) || (type != 4 && type != 5))
+        if (!(Check.checkUp(request,userMeetingService,meetingId)))
         {
+            return ResultBean.error(-12,"无权限");
+        }
+        if (type != 4 && type != 5){
             return ResultBean.error(-12,"无权限");
         }
         SendToMany many = new SendToMany(meetingId,content,type);

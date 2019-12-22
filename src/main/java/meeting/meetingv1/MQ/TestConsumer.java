@@ -1,5 +1,6 @@
 package meeting.meetingv1.MQ;
 
+import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import meeting.meetingv1.pojo.Meeting;
@@ -8,6 +9,7 @@ import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.service.*;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,8 @@ import java.util.Timer;
 
 @Component
 public class TestConsumer {
+
+
 
     @Autowired
     ObjectMapper objectMapper;
@@ -34,7 +38,7 @@ public class TestConsumer {
 
     @KafkaListener(topics = "test2")
     public void listen1(ConsumerRecord record) throws JsonProcessingException {
-
+//        logger.info("收到信息！！！！！");
         SendToMany sendToMany = objectMapper.readValue((String) record.value(), SendToMany.class);
         List<UserMeeting> preferenceByMeet = userMeetingService.findPreferenceByMeet(sendToMany.getMeetingId(), (byte) (int) sendToMany.getType());
         Message message = new Message();

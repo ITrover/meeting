@@ -13,8 +13,11 @@ public class Check {
         Integer userId = (Integer)session.getAttribute("userId");
         List<UserMeeting> meetingsByBuilder = userMeetingService.getMeetingsByBuilder(userId);
         boolean flag = false;
+        if (meetingsByBuilder.size() == 0){
+            return false;
+        }
         for (UserMeeting userMeeting :meetingsByBuilder){
-            if (userMeeting.getUserid().equals(meetingId)){
+            if (userMeeting.getMeetingid() == (meetingId)){
                 return true;
             }
         }

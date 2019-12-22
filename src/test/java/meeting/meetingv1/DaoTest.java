@@ -150,7 +150,7 @@ public class DaoTest {
     UserMeetingMapper userMeetingMapper;
     @Autowired
     VoUserTaskInfoService voUserTaskInfoService;
-    @Test
+//    @Test
     void name5() throws JsonProcessingException {
         Meeting meeting = new Meeting();
         String json = objectMapper.writeValueAsString(userMeetingMapper.getVolunteers(24));

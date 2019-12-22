@@ -42,6 +42,8 @@ spring:
     consumer:
 #      消费者组名
       group-id: my-consumer-group
+      enable-auto-commit: true
+      auto-commit-interval: 1000
 
 
 mybatis:

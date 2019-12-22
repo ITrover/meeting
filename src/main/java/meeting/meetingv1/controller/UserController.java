@@ -1,6 +1,7 @@
 package meeting.meetingv1.controller;
 
 import com.aliyuncs.exceptions.ClientException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.MQ.KafkaSender;
@@ -16,6 +17,7 @@ import meeting.meetingv1.service.MailService;
 import meeting.meetingv1.service.SmsService;
 import meeting.meetingv1.service.UserService;
 import meeting.meetingv1.service.VerificationCodeService;
+import meeting.meetingv1.util.JsonUtil;
 import meeting.meetingv1.util.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +44,8 @@ public class UserController {
     VerificationCodeService codeService;
     @Autowired
     MailService mailService;
+    @Autowired
+    JsonUtil jsonUtil;
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
 //    @Autowired
@@ -85,13 +90,17 @@ public class UserController {
 
     /**
      * 注册
-     * @param user
-     * @return
+     * @param userJson
+     * @return 22049
      * @throws SignUpColumnException
      */
     @PostMapping("signup")
-    @ApiOperation(value = "用户注册",notes = "参数： 1、验证码 verificationCode; 用户信息realname、username(必选)、gender、emailaddr(必选)、phone(必选)、password(必选)、organization组成的对象序列化后的字符串为用户信息的序列化")
-    public ResultBean signUp(User user,String verificationCode) throws SignUpColumnException, VerificationException {
+    @ApiOperation(value = "用户注册",notes = "参数： " +
+            "<br>1、验证码 verificationCode; " +
+            "<br>2、用户信息 userJson 其中包括：realname、username(必选)、gender、emailaddr(必选)、phone(必选)、password(必选)、organization," +
+            "<br>以上信息为对象序列化后得Json串使用UTF-8编码后得字符串")
+    public ResultBean signUp(String userJson,String verificationCode) throws SignUpColumnException, VerificationException, UnsupportedEncodingException, JsonProcessingException {
+        User user = (User)jsonUtil.decodeUTF8JsonToObject(userJson, User.class);
         codeService.doVerified(user.getPhone(),verificationCode);
         userService.signUp(user);
         log.info("用户："+user.getUsername() + " 成功注册");
@@ -125,8 +134,12 @@ public class UserController {
     }
     @UserLoginToken
     @PostMapping("update")
-    @ApiOperation(value = "修改用户信息",notes = "参数： 1、登陆token<br>2、可选字段：用户名 username;真实名 realname;性别 gender;所属组织 organization;")
-    public ResultBean updateUserInfo(User user){
+    @ApiOperation(value = "修改用户信息",notes = "参数： " +
+            "1、登陆token" +
+            "<br>2、用户信息 userJson ，使用UTF8编码后的json字符串 " +
+            "<br>可选字段：用户名 username;真实名 realname;性别 gender;所属组织 organization;")
+    public ResultBean updateUserInfo(String userJson) throws UnsupportedEncodingException, JsonProcessingException {
+        User user = (User) jsonUtil.decodeUTF8JsonToObject(userJson, User.class);
         userService.updateUserInfo(user);
         return ResultBean.success();
     }
