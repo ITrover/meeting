@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.List;
 @Api(tags = {"会议相关文档操作接口"})
@@ -92,18 +93,21 @@ public class FileUploadController {
         byte[] bytes = new byte[stream.available()];
         stream.read(bytes,0,stream.available());
         response.getOutputStream().write(bytes);
+        stream.close();
+        outputStream.close();
     }
 
-    @UserLoginToken
+//    @UserLoginToken
     @PostMapping("/file")
     @ApiOperation(value = "上传一个会议相关文件",notes = "参数： <br>1、会议ID meetingId  <br>2、文件上传时name应为file  <br>3、登陆token  <br> 注意：上传同名文件将覆盖旧文件")
-    public ResultBean uploadMeetingFile(@RequestParam("file")MultipartFile uploadFile,String meetingId){
+    public ResultBean uploadMeetingFile(@RequestParam("file")MultipartFile uploadFile,String meetingId) throws UnsupportedEncodingException {
         if (uploadFile == null){
             return ResultBean.error(-7,"未选择文件");
         }
         File folder = getRootPath(meetingFileRootPath,meetingId);
         logger.info("会议相关文件夹路径:"+folder.getAbsolutePath());
-        String originalFilename = uploadFile.getOriginalFilename();
+        String originalFilename = URLDecoder.decode(uploadFile.getOriginalFilename(), "utf-8");
+//        originalFilename
         logger.info("文件原名："+originalFilename);
         File file = new File(folder, originalFilename);
         try{
@@ -117,6 +121,7 @@ public class FileUploadController {
             file.delete();
             return ResultBean.error(-8,"文件保存失败");
         }
+
         return  ResultBean.success();
     }
 
@@ -129,7 +134,7 @@ public class FileUploadController {
     }
     @GetMapping("/file")
     @ApiOperation(value = "下载一个文件",notes = "参数： <br>1、会议ID meetingId<br>2、文件名fileName")
-    public String downLoad(HttpServletResponse response,Integer meetingId,String fileName) throws FileNotFindException1, FileSendException {
+    public String downLoad(HttpServletResponse response,Integer meetingId,String fileName) throws FileNotFindException1, FileSendException, IOException {
         File file = new File(meetingFileRootPath+"/"+meetingId+"/"+fileName);
         if (!file.exists()){
             throw new FileNotFindException1();
@@ -153,6 +158,9 @@ public class FileUploadController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new FileSendException();
+        }
+        if (bis != null){
+            bis.close();
         }
         return null;
     }

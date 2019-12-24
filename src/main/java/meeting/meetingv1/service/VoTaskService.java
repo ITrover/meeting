@@ -17,6 +17,7 @@ public class VoTaskService {
             return;
         for (Voluntask task:voluntasks){
             task.setMeetid(meetingId);
+            task.setTaskid(null);
             voluntaskMapper.insert(task);
         }
     }

@@ -28,6 +28,8 @@ import java.util.*;
 @Api(tags = "会议相关接口")
 public class MeetingController {
     @Autowired
+    MeetFileSercice meetFileSercice;
+    @Autowired
     MeetingService meetingService;
     @Autowired
     VoluntEventService voluntService;
@@ -141,10 +143,12 @@ public class MeetingController {
         Volunt volunt = voluntService.getVoEventByMeetingId(id);
         List<Guest> guests = guestService.findByGuestMeetingId(id);
         List<Voluntask> tasks = voTaskService.getTasks(id);
+        List<Meetingfile> fileInfoByMeetID = meetFileSercice.getFileInfoByMeetID(id);
         map.put("meeting", meeting);
         map.put("volunt", volunt);
         map.put("tasks",tasks);
         map.put("guests", guests);
+        map.put("files",fileInfoByMeetID);
         return ResultBean.success(map);
     }
 //    @ApiOperation(value = "根据会议id得到会议详细信息",notes = "参数： <br>1、会议ID meetingId   " )
@@ -222,7 +226,8 @@ public class MeetingController {
             " <br>2、location 会议地点 如逸夫楼 <br>3、date 会议日期 格式 yyyy-MM-dd  如2019-11-25 ")
     @ResponseBody
     @RequestMapping(path = "/meetings/dy", method = RequestMethod.GET)
-    public ResultBean findMeetingsDy(@Nullable Integer type, @Nullable String location, @Nullable Date beginTime,@Nullable Date endTime,@Nullable String name) {
+    public ResultBean findMeetingsDy(@Nullable Integer type, @Nullable String location,
+                                     @Nullable Date beginTime,@Nullable Date endTime,@Nullable String name) {
 //        int meetingsType = meetingService.findMeetingsType(type);
         List<Meeting> meetings = meetingService.findMeetingsDy(type, location, endTime,beginTime, name);
         HashMap hashMap = new HashMap();

@@ -52,6 +52,7 @@ public class IconController {
         byte[] bytes = new byte[stream.available()];
         stream.read(bytes,0,stream.available());
         response.getOutputStream().write(bytes);
+        stream.close();
     }
 
     @PostMapping("/meetingIcon/{meetingId}")

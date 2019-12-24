@@ -36,7 +36,7 @@ public class TestConsumer {
     @Autowired
     UserMeetingService userMeetingService;
 
-    @KafkaListener(topics = "test2")
+//    @KafkaListener(topics = "test2")
     public void listen1(ConsumerRecord record) throws JsonProcessingException {
 //        logger.info("收到信息！！！！！");
         SendToMany sendToMany = objectMapper.readValue((String) record.value(), SendToMany.class);
@@ -53,7 +53,7 @@ public class TestConsumer {
             msgService.sendMsg(message);
         }
     }
-    @KafkaListener(topics = "VolunStatusInfo")
+//    @KafkaListener(topics = "VolunStatusInfo")
     public void listen(ConsumerRecord record) throws JsonProcessingException {
         VolunStatusInfo volunStatusInfo = objectMapper.readValue((String) record.value(), VolunStatusInfo.class);
         Message message = new Message();

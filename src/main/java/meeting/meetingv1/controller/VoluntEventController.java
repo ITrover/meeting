@@ -84,9 +84,7 @@ public class VoluntEventController {
             "<br>2、登陆token" +
             "<br>3. 用户学号(可选)" +
             "<br>4. 用户身份证号(可选)" +
-            "<br>5. 工作序号 taskid" +
-            "<br>6. 学号 studentid" +
-            "<br>7. 身份证号 personid")
+            "<br>5. 工作序号 taskid" )
     public ResultBean join(@PathVariable Integer meetingId, Voluntinfo voluntinfo, HttpServletRequest request) throws ParameterException {
         Byte b = 4;//4 为申请志愿者
         userMeetingService.addRelation(new UserMeeting(null,Check.getUserID(request),meetingId,b));
