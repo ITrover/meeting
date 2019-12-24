@@ -50,12 +50,13 @@ public class UserController {
 
 //    @Autowired
 //    KafkaSender kafkaSender;
-//    @RequestMapping("hello/{s}")//测试用
-//    public String userController(@PathVariable String s){
+    @PostMapping("hello/{s}")//测试用
+    public String userController(@PathVariable String s,@RequestBody String json){
 //        kafkaSender.sendMsg("test2","121","测试消息1111111 "+s);
-//        System.out.println("发送完成");
-//        return "";
-//    }
+        System.out.println(json);
+        System.out.println("发送完成");
+        return "";
+    }
 
     @PostMapping("publicInfo")
     @ApiOperation(value = "获取用户公开的信息",notes = "参数： 1、用户ID <br>说明：这个接口的主要目的在会议的组织者查看请求的志愿者信息，其他用途也可以，并没设置登陆验证")

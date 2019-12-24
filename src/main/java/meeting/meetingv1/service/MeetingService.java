@@ -101,9 +101,24 @@ public class MeetingService {
 
     //动态查询
 //这里还差一个日期的限制.and....还有type没有查出来
-    public List<Meeting> findMeetingsDy(int type, String location, Date date) {
+    public List<Meeting> findMeetingsDy(Integer type, String location, Date beginTime,Date endTime,String name) {
         MeetingExample meetingExample = new MeetingExample();
-        meetingExample.createCriteria().andTypeidEqualTo(type).andLocationEqualTo(location);//这里还差一个日期的限制.and....
+        MeetingExample.Criteria criteria = meetingExample.createCriteria();//这里还差一个日期的限制.and....
+        if (type != null){
+            criteria.andTypeidEqualTo(type);
+        }
+        if (location != null){
+            criteria.andLocationLike(location);
+        }
+        if (beginTime != null){
+            criteria.andStartTimeLessThanOrEqualTo(beginTime);
+        }
+        if (endTime != null){
+            criteria.andStartTimeGreaterThanOrEqualTo(endTime);
+        }
+        if (name != null){
+            criteria.andMNameLike(name);
+        }
         List<Meeting> meetings = meetingMapper.selectByExample(meetingExample);
         return meetings;
     }

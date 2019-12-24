@@ -13,10 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -104,7 +105,7 @@ public class DaoTest {
     }
     @Autowired
     ObjectMapper objectMapper;
-//    @Test
+    @Test
     void ceshiJs() throws JsonProcessingException, UnsupportedEncodingException {
 //        Event event = new Event();
 //        event.setMessage(new Message(null, 0, 1, 2, "测试消息"));
@@ -158,6 +159,22 @@ public class DaoTest {
         System.out.println();
 //        System.out.println(
 //                objectMapper.writeValueAsString(voUserTaskInfoService.getMyTaskInfo(17)));
+    }
+
+//    @Test
+    void name6() throws JsonProcessingException, UnsupportedEncodingException {
+        Meeting meeting = new Meeting();
+        meeting.setStartTime(new Date());
+        meeting.setmName("第一次会议");
+        meeting.setIntroduction("huijianjiena");
+        meeting.setLocation("第三教学楼");
+        String string = objectMapper.writeValueAsString(meeting);
+//        string = "{\"meetingid\":null,\"mName\":null,\"location\":null,\"startTime\":\"2019-12-22\",\"closeTime\":null,\"introduction\":null,\"schedule\":null,\"needvolunteer\":null,\"typeid\":null,\"organizer\":null,\"hostedby\":null,\"communicate\":null}";
+        String encode = URLEncoder.encode(string, "utf-8");
+        System.out.println(string);
+        Meeting meeting1 = objectMapper.readValue(string, Meeting.class);
+        Date startTime = meeting.getStartTime();
+        System.out.println(encode);
     }
 }
 

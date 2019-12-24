@@ -13,7 +13,7 @@ public class StringToDateConverter implements Converter<String, Date> {
     public Date convert(String source) {
         Date target = null;
         if(!StringUtils.isEmpty(source)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 target =  format.parse(source);
             } catch (ParseException e) {

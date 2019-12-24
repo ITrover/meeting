@@ -1,5 +1,7 @@
 package meeting.meetingv1.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.UserLoginToken;
@@ -14,9 +16,12 @@ import meeting.meetingv1.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +29,8 @@ import java.util.Map;
 @RestController
 @Api(tags = "会议志愿工作接口")
 public class VoluntTaskController {
-
+    @Autowired
+    ObjectMapper objectMapper;
     @Autowired
     VoTaskService voTaskService;
     @Autowired
@@ -74,6 +80,20 @@ public class VoluntTaskController {
         map.put("tasks",voUserTaskInfoService.getMyTaskInfo(userId));
         return ResultBean.success(map);
     }
+    @PostMapping("tasks/add/{meetingId}")
+    @ApiOperation(value = "",
+            notes = "参数：<br>1. meetingId"
+    )
+    @UserLoginToken
+    public ResultBean addTasks(@PathVariable Integer meetingId, HttpServletRequest request,String taskjson) throws UnsupportedEncodingException, JsonProcessingException {
+        if (!Check.checkUp(request,userMeetingService,meetingId)){
+            return ResultBean.error(-12,"无权限");
+        }
+        String decode = URLDecoder.decode(taskjson, "utf-8");
+        Voluntask[] tasks = objectMapper.readValue(decode, Voluntask[].class);
+        voTaskService.addTask(tasks,meetingId);
+
+        return ResultBean.success();
+    }
 
 }
-

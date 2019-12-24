@@ -1,11 +1,11 @@
 spring:
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd
     time-zone: GMT+8
   datasource:
     username: root
     password: 78652Acd@
-    url: jdbc:mysql://39.108.158.74:3306/meeting?serverTimezone=GMT
+    url: jdbc:mysql://39.108.158.74:3306/meeting?serverTimezone=Asia/Shanghai
     initialization-mode: always
     type: com.alibaba.druid.pool.DruidDataSource
 #    Druid配置

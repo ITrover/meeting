@@ -62,5 +62,4 @@ public interface GuestMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Guest record);
-
 }

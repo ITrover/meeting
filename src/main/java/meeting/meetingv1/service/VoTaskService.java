@@ -13,6 +13,8 @@ public class VoTaskService {
     @Autowired
     VoluntaskMapper voluntaskMapper;
     public void addTask(Voluntask[] voluntasks,Integer meetingId) {
+        if (voluntasks.length < 1)
+            return;
         for (Voluntask task:voluntasks){
             task.setMeetid(meetingId);
             voluntaskMapper.insert(task);

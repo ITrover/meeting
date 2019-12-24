@@ -45,19 +45,21 @@ public class GuestController {
     @PostMapping("guest")
     @ApiOperation(value = "增加嘉宾信息",notes =
             "参数： <br>1、相关的会议id meetingId<br>" +
-                       "2、嘉宾简介 introduction <br>" +
-                        "3、嘉宾头像 icon （可选）"+
-                       "4、登陆token<br>"
+                       "<br>2、嘉宾简介 introduction <br>" +
+                        "<br>3、嘉宾头像 icon （可选）"+
+                       "<br>4、登陆token<br>" +
+                    "5、嘉宾 姓名 name"
                     )
     @UserLoginToken
-    public ResultBean add(HttpServletRequest request,Integer meetingId,String introduction
+    public ResultBean add(HttpServletRequest request,Integer meetingId,String introduction,
+                          @Nullable String name
     ,@Nullable @RequestParam("icon") MultipartFile uploadFile) throws FileInfoStoreException {
         if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
         }
         String newName = null;
         if (uploadFile != null){
-            File folder = getRootPath(meetingFileRootPath,meetingId+"/guest");
+            File folder = getRootPath(meetingFileRootPath,"guest");
             String originalFilename = uploadFile.getOriginalFilename();
             newName = UUID.randomUUID().toString() + originalFilename.substring(originalFilename.lastIndexOf("."), originalFilename.length());
             File file = new File(folder, newName);
@@ -72,7 +74,7 @@ public class GuestController {
                 throw  new FileInfoStoreException();
             }
         }
-        Guest guest = new Guest(null,meetingId,newName,introduction);
+        Guest guest = new Guest(null,meetingId,newName,introduction,name);
         guestService.addGuest(guest);
         return ResultBean.success();
     }
@@ -82,7 +84,7 @@ public class GuestController {
     public void getMeetIcon(@PathVariable String avatarUrl, HttpServletResponse response) throws IOException {
 
         OutputStream outputStream = response.getOutputStream();
-        File file = new File(meetingFileRootPath + "/guest/" + avatarUrl);
+        File file = new File(meetingFileRootPath +"/guest/" + avatarUrl);
         if (!file.exists()){
             file = new File(defaultGuestImgPath);
 
@@ -131,10 +133,11 @@ public class GuestController {
                     "2、嘉宾简介 introduction（可选） <br>" +
                     "3、嘉宾头像(图片) icon （可选）"+
                     "4、登陆token<br>" +
-                    "5、嘉宾ID guestId"
+                    "5、嘉宾ID guestId" +
+                    "6、嘉宾 姓名 name"
     )
     @UserLoginToken
-    public ResultBean update(HttpServletRequest request,Integer guestId,Integer meetingId,@Nullable String introduction
+    public ResultBean update(HttpServletRequest request,Integer guestId,Integer meetingId,@Nullable String introduction,@Nullable String name
             ,@Nullable @RequestParam("icon") MultipartFile uploadFile) throws FileInfoStoreException {
         if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
@@ -154,7 +157,7 @@ public class GuestController {
                 throw  new FileInfoStoreException();
             }
         }
-        Guest guest = new Guest(guestId,meetingId,newName,introduction);
+        Guest guest = new Guest(guestId,meetingId,newName,introduction,name);
         guestService.updateGuest(guest);
         return ResultBean.success();
     }
