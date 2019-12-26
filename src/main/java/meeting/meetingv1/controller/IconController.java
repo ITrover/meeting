@@ -51,7 +51,12 @@ public class IconController {
         FileInputStream stream = new FileInputStream(file);
         byte[] bytes = new byte[stream.available()];
         stream.read(bytes,0,stream.available());
-        response.getOutputStream().write(bytes);
+        try{
+            response.getOutputStream().write(bytes);
+        }catch (Exception e){
+            stream.close();
+            return;
+        }
         stream.close();
     }
 

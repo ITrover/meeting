@@ -20,6 +20,7 @@ public class JsonUtil<V>{
     ObjectMapper objectMapper;
     Logger logger = LoggerFactory.getLogger(this.getClass());
     public Object decodeUTF8JsonToObject(String jsonString,Class target) throws UnsupportedEncodingException, JsonProcessingException {
+        logger.info("解码前注册Json："+jsonString);
         String decode = URLDecoder.decode(jsonString, "utf-8");
         logger.info("解码后Json字符串："+decode);
         return objectMapper.readValue(decode, target);

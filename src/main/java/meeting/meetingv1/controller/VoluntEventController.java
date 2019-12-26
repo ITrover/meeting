@@ -14,6 +14,8 @@ import meeting.meetingv1.pojo.mybeans.VolunteerInfo;
 import meeting.meetingv1.service.*;
 import meeting.meetingv1.util.Check;
 import meeting.meetingv1.util.ResultBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +31,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "会议的志愿活动相关接口")
 public class VoluntEventController {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     VoluntEventService voluntEventService;
     @Autowired
@@ -87,8 +90,10 @@ public class VoluntEventController {
             "<br>5. 工作序号 taskid" )
     public ResultBean join(@PathVariable Integer meetingId, Voluntinfo voluntinfo, HttpServletRequest request) throws ParameterException {
         Byte b = 4;//4 为申请志愿者
+        logger.info("用户申请志愿者，学号:"+voluntinfo.getStudentid());
         userMeetingService.addRelation(new UserMeeting(null,Check.getUserID(request),meetingId,b));
         voUserTaskInfoService.add(voluntinfo);
+        logger.info("志愿信息储存完毕");
         return ResultBean.success();
     }
 

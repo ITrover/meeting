@@ -18,6 +18,13 @@ public class UserMeetingService {
         return userMeetingMapper.count(type, meetingid);
     }
 
+    public void delete(UserMeeting userMeeting) throws ParameterException {
+        if (userMeeting.getType() != 2 && userMeeting.getType() != 3)
+        {
+            throw new ParameterException();
+        }
+        userMeetingMapper.delete(userMeeting);
+    }
     public List<UserMeeting> getMeetingsByBuilder(Integer userId){
         UserMeetingExample example = new UserMeetingExample();
         UserMeetingExample.Criteria criteria = example.createCriteria();
@@ -27,7 +34,7 @@ public class UserMeetingService {
         return userMeetingMapper.selectByExample(example);
     }
     public boolean addRelation(UserMeeting userMeeting) throws ParameterException {
-        if (userMeeting.getType() != 2 && userMeeting.getType() != 3){
+        if (userMeeting.getType() != 2 && userMeeting.getType() != 3 && userMeeting.getType() != 4 ){
             throw new ParameterException();
         }
         userMeetingMapper.insert(userMeeting);

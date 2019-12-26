@@ -33,7 +33,14 @@ public class UserMeetingControllor {
         userMeetingService.addRelation(new UserMeeting(null, Check.getUserID(request),meetingId,new Byte(type.toString())));
         return ResultBean.success();
     }
+    @UserLoginToken
+    @PostMapping("/quit/{meetingId}")
+    @ApiOperation(value = "退出会议 取消收藏会议",notes = "参数： <br>1、登陆token<br>2、操作类型 type （2为参加 3为收藏 ）<br>3、路径变量会议id meetingId")
+    public ResultBean preference(@PathVariable("meetingId") Integer meetingId, Integer type, HttpServletRequest request) throws ParameterException {
 
+        userMeetingService.delete(new UserMeeting(null, Check.getUserID(request),meetingId,new Byte(type.toString())));
+        return ResultBean.success();
+    }
     /***
      * type 1为创建 2为参加 3为收藏
      * 根据用户查询对应的
