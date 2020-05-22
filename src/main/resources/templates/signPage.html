@@ -6,12 +6,31 @@
 </head>
 
 <body>
-<h1 th:text="${map['meetingId']}"></h1>
-<h1 th:text="${map['code']}"></h1>
+<p>meetingId=<span th:text="${map['meetingId']}"></span></p>
+<p>code=<span th:text="${map['code']}"></span></p>
+<!--<img th:src="@{/static/img/变量获取方式.png}">-->
+<img src="img/变量获取方式.png">
+<hr>
 <script th:inline="javascript">
     let meetingId = [[${map['meetingId']}]];
     let code = [[${map['code']}]];
-
+</script>
+<form id="f1">
+    <div class="info">
+        <label >key</label>
+        <input type="text" placeholder="key" required="required" name="key">
+    </div>
+    <div class="info">
+        <label >password</label>
+        <input id="psw1" type="password" placeholder="password" required="required" name = "password">
+    </div>
+    <input id="b1" class="button" type="submit" value="签到">
+</form>
+<script>
+    function formInit() {
+        document.getElementById("f1").action="/sign/"+meetingId+"/" +code;
+    }
+    formInit();
 </script>
 </body>
 </html>

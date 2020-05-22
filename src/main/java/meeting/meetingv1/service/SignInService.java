@@ -13,11 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import sun.security.provider.MD5;
 
-import javax.xml.ws.soap.Addressing;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -33,7 +32,7 @@ public class SignInService {
     //用户生成签到二维码
     public void getSignPic(OutputStream outputStream,Integer meetingId) throws IOException, WriterException {
         MeetingSignInTable signInTable = tableMapper.selectByPrimaryKey(meetingId);
-        qrCodeGenerator.generateQRCodeImage(baseURL+"/goSignPage/"+meetingId+"/"+signInTable.getSpecialCode(),400,400,outputStream);
+        qrCodeGenerator.generateQRCodeImage(baseURL+"/goSignPage?meetingId="+meetingId+"&code="+signInTable.getSpecialCode(),400,400,outputStream);
     }
     //增加签到任务
     public void addSign(Date signInBeginTime,Integer meetingId){
@@ -79,6 +78,7 @@ public class SignInService {
     @Autowired
     UserService userService;
     public Collection SignStatistic(Integer meetingId){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyy-MM-dd hh:mm:ss");
         Byte type = 2;//2 为参加的会议，应该整一个静态变量的
         List<UserMeeting> joinedUsers = userMeetingService.findPreferenceByMeet(meetingId, type);
         List<MeetingSignInUser> signList = meetingSignedList(meetingId);
@@ -91,7 +91,7 @@ public class SignInService {
                     new SignInfo(
                             joinedUser.getUserid(),
                             userService.findUserById(joinedUser.getUserid()).getUsername(),
-                            signedMap.get(joinedUser.getUserid()) == null ? null:signedMap.get(joinedUser.getUserid()).getSignTime()
+                            signedMap.get(joinedUser.getUserid()) == null ? null:dateFormat.format(signedMap.get(joinedUser.getUserid()).getSignTime())
                             ));
         }
         return infoMap.values();
@@ -111,9 +111,9 @@ public class SignInService {
     private class SignInfo{
         private Integer userId;
         private String  userName;
-        private Date    signInTime;
+        private String signInTime;
 
-        public SignInfo(Integer userId, String userName, Date signInTime) {
+        public SignInfo(Integer userId, String userName, String signInTime) {
             this.userId = userId;
             this.userName = userName;
             this.signInTime = signInTime;
@@ -135,11 +135,11 @@ public class SignInService {
             this.userName = userName;
         }
 
-        public Date getSignInTime() {
+        public String getSignInTime() {
             return signInTime;
         }
 
-        public void setSignInTime(Date signInTime) {
+        public void setSignInTime(String signInTime) {
             this.signInTime = signInTime;
         }
     }
