@@ -66,25 +66,25 @@ public class MeetingController {
     }
 
     //还没测试
-    @ResponseBody
-    @UserLoginToken
-    @RequestMapping(path = "meeting/add", method = RequestMethod.POST)
-    public ResultBean publishMeeting(Meeting meeting, Volunt volunt, ArrayList<Guest> guests,
-    HttpServletRequest request
-    ) throws ParameterException {
-        System.out.println(meeting+""+volunt+guests);
-//        System.out.println(meeting+" "+volunt+guests);
-        int meetingId = meetingService.addMeeting(meeting);
-        voluntService.addVoluntEvent(volunt);
-        for (int i = 0; i < guests.size(); i++) {
-            guests.get(i).setMeetingid(meetingId);
-            guestService.addGuest(guests.get(i));
-        }
-        //增加关系
-        userMeetingService.addRelation(new UserMeeting( Check.getUserID(request),meetingId,CREAT_RELATION));
-//        guestService.addguest(guests);
-        return ResultBean.success();
-    }
+//    @ResponseBody
+//    @UserLoginToken
+//    @RequestMapping(path = "meeting/add", method = RequestMethod.POST)
+//    public ResultBean publishMeeting(Meeting meeting, Volunt volunt, ArrayList<Guest> guests,
+//    HttpServletRequest request
+//    ) throws ParameterException {
+//        System.out.println(meeting+""+volunt+guests);
+////        System.out.println(meeting+" "+volunt+guests);
+//        int meetingId = meetingService.addMeeting(meeting);
+//        voluntService.addVoluntEvent(volunt);
+//        for (int i = 0; i < guests.size(); i++) {
+//            guests.get(i).setMeetingid(meetingId);
+//            guestService.addGuest(guests.get(i));
+//        }
+//        //增加关系
+//        userMeetingService.addRelation(new UserMeeting( Check.getUserID(request),meetingId,CREAT_RELATION));
+////        guestService.addguest(guests);
+//        return ResultBean.success();
+//    }
 
 
     /**
@@ -208,8 +208,11 @@ public class MeetingController {
     //与我有关的会议+时间查询 没测通
     @ResponseBody
     @RequestMapping(path = "/meetings/my/{mode}", method = RequestMethod.GET)
-    public ResultBean findMeetingsByUserIdAndTime(int userid,@PathVariable("mode") int mode) {
-        List<Meeting> meetings = meetingService.findMeetingsByUserIdAndTime(userid,mode);
+    @ApiOperation(value = "查询自己有关的会议",notes = "mode可选 1、2、3、4、5")
+    @UserLoginToken
+    public ResultBean findMeetingsByUserIdAndTime(@PathVariable("mode") Integer mode,HttpServletRequest request) {
+        Integer userID = Check.getUserID(request);
+        List<Meeting> meetings = meetingService.findMeetingsByUserIdAndTime(userID,mode);
         HashMap hashMap = new HashMap();
         hashMap.put("meetings", meetings);
         return ResultBean.success(hashMap);
