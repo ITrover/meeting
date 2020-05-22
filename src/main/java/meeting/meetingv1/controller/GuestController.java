@@ -47,12 +47,12 @@ public class GuestController {
             "参数： <br>1、相关的会议id meetingId<br>" +
                        "<br>2、嘉宾简介 introduction <br>" +
                         "<br>3、嘉宾头像 icon （可选）"+
-                       "<br>4、登陆token<br>" +
-                    "5、嘉宾 姓名 name"
+                       "<br>4、登陆token" +
+                    "<br>嘉宾姓名name、职位position、航班信息flightInfo、身份证号personId、嘉宾电话guestTel"
                     )
     @UserLoginToken
     public ResultBean add(HttpServletRequest request,Integer meetingId,String introduction,
-                          @Nullable String name
+                          @Nullable String name, String position, String flightInfo, String personId,String guestTel
     ,@Nullable @RequestParam("icon") MultipartFile uploadFile) throws FileInfoStoreException {
         if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
@@ -73,8 +73,19 @@ public class GuestController {
                 e.printStackTrace();
                 throw  new FileInfoStoreException();
             }
-        }
-        Guest guest = new Guest(null,meetingId,newName,introduction,name);
+        }/**
+         Integer guestid,
+         Integer meetingid,
+         String avatarUrl,
+         String introduction,
+         String name,
+         String position,
+         String flightInfo,
+         String personId,
+         String guestTel) {
+
+         */
+        Guest guest = new Guest(null,meetingId,newName,introduction,name,position,flightInfo,personId,guestTel);
         guestService.addGuest(guest);
         return ResultBean.success();
     }
@@ -134,10 +145,17 @@ public class GuestController {
                     "3、嘉宾头像(图片) icon （可选）"+
                     "4、登陆token<br>" +
                     "5、嘉宾ID guestId" +
-                    "6、嘉宾 姓名 name"
+                    "6、嘉宾姓名 name" +
+                    "7、嘉宾电话 guestTel"
     )
     @UserLoginToken
-    public ResultBean update(HttpServletRequest request,Integer guestId,Integer meetingId,@Nullable String introduction,@Nullable String name
+    public ResultBean update(HttpServletRequest request,Integer guestId,Integer meetingId,
+                             @Nullable String introduction,
+                             @Nullable String name,
+                             @Nullable String position,
+                             @Nullable String flightInfo,
+                             @Nullable String personId,
+                             @Nullable String guestTel
             ,@Nullable @RequestParam("icon") MultipartFile uploadFile) throws FileInfoStoreException {
         if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
@@ -157,7 +175,7 @@ public class GuestController {
                 throw  new FileInfoStoreException();
             }
         }
-        Guest guest = new Guest(guestId,meetingId,newName,introduction,name);
+        Guest guest = new Guest(guestId,meetingId,newName,introduction,name,position,flightInfo,personId,guestTel);
         guestService.updateGuest(guest);
         return ResultBean.success();
     }

@@ -22,6 +22,27 @@
 
     <dependencies>
 
+        <dependency><!--热部署依赖-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+<!--        生成二维码相关依赖-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+<!--        消息队列-->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
@@ -81,11 +102,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 <!--        <dependency>-->
@@ -121,32 +137,47 @@
     </dependencies>
 
     <build>
-        <finalName>meeting-v1</finalName>
+        <finalName>meeting</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>meeting.meetingv1.MettingV1Application</mainClass>
-
+                    <fork>true</fork>
                 </configuration>
             </plugin>
+<!--            逆向工程的插件-->
+<!--            <plugin>-->
+<!--                <groupId>org.mybatis.generator</groupId>-->
+<!--                <artifactId>mybatis-generator-maven-plugin</artifactId>-->
+<!--                <version>1.3.7</version>-->
+<!--                <configuration>-->
+<!--                    <configurationFile>src\main\resources\generatorConfig.xml</configurationFile>-->
+<!--                    <verbose>true</verbose>-->
+<!--                    <overwrite>true</overwrite>-->
+<!--                </configuration>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>mysql</groupId>-->
+<!--                        <artifactId>mysql-connector-java</artifactId>-->
+<!--                        <version>5.1.47</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--            </plugin>-->
         </plugins>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
-                <!-- 此配置不可缺，否则mybatis的Mapper.xml将会丢失 -->
                 <includes>
                     <include>**/*.xml</include>
                 </includes>
             </resource>
-            <!--指定资源的位置-->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/*.yml</include>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
+                    <include>**/*</include>
                 </includes>
             </resource>
         </resources>

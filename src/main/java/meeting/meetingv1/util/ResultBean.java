@@ -1,6 +1,8 @@
 package meeting.meetingv1.util;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ResultBean {
@@ -24,6 +26,11 @@ public class ResultBean {
         resultBean.setCode(0);
         resultBean.setMessage("success");
         return resultBean;
+    }
+    public static ResultBean success(List list) {
+        HashMap<String ,List> map = new HashMap<>();
+        map.put("list",list);
+        return success(map);
     }
 
     public static  ResultBean success(Map data) {

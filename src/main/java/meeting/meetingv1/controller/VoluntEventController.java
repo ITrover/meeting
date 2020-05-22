@@ -91,7 +91,7 @@ public class VoluntEventController {
     public ResultBean join(@PathVariable Integer meetingId, Voluntinfo voluntinfo, HttpServletRequest request) throws ParameterException {
         Byte b = 4;//4 为申请志愿者
         logger.info("用户申请志愿者，学号:"+voluntinfo.getStudentid());
-        userMeetingService.addRelation(new UserMeeting(null,Check.getUserID(request),meetingId,b));
+        userMeetingService.addRelation(new UserMeeting(Check.getUserID(request),meetingId,b));
         voUserTaskInfoService.add(voluntinfo);
         logger.info("志愿信息储存完毕");
         return ResultBean.success();

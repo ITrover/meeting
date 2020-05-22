@@ -49,6 +49,10 @@ public class MeetingService {
         List<Meeting> meetings = meetingMapper.selectMeetings(offset, limit);
         return meetings;
     }
+    public Integer countOfMeetings(){
+        int i = meetingMapper.selectMeetingRows();
+        return i;
+    }
 
     //和用户相关会议 没做分页
     public List<Meeting> findMeetingsByUserId(int userid) {

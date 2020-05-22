@@ -55,7 +55,15 @@ public class MeetingController {
         map.put("types",meetingTypeService.getTypes());
         return ResultBean.success(map);
     }
-
+    @ResponseBody
+    @RequestMapping(path = "meeting/count", method = RequestMethod.POST)
+    @ApiOperation(value = "获取会议总数")
+    public ResultBean countOfMeetings() {
+        Integer integer = meetingService.countOfMeetings();
+        HashMap<String ,Integer> map = new HashMap<>();
+        map.put("count",integer);
+        return ResultBean.success(map);
+    }
 
     //还没测试
     @ResponseBody
@@ -73,7 +81,7 @@ public class MeetingController {
             guestService.addGuest(guests.get(i));
         }
         //增加关系
-        userMeetingService.addRelation(new UserMeeting(null, Check.getUserID(request),meetingId,CREAT_RELATION));
+        userMeetingService.addRelation(new UserMeeting( Check.getUserID(request),meetingId,CREAT_RELATION));
 //        guestService.addguest(guests);
         return ResultBean.success();
     }
@@ -115,7 +123,7 @@ public class MeetingController {
         Meeting meeting = jsonUtil.decodeUTF8JsonToMeeting(meetingJson);
 
         Integer meetingId = meetingService.addMeeting(meeting);
-        userMeetingService.addRelation(new UserMeeting(null, Check.getUserID(request),meetingId,CREAT_RELATION),true);
+        userMeetingService.addRelation(new UserMeeting(Check.getUserID(request),meetingId,CREAT_RELATION),true);
         if (taskjson != null){
             String decode = URLDecoder.decode(taskjson, "utf-8");
             Voluntask[] tasks = objectMapper.readValue(decode, Voluntask[].class);

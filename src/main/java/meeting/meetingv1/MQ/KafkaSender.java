@@ -21,7 +21,7 @@ public class KafkaSender {
      * 发送消息到kafka test2
      *@param messageBody 内容体
      */
-    public void sendMsg(String topic,Event messageBody) throws JsonProcessingException {
+    public void sendMsg(String topic, Event messageBody) throws JsonProcessingException {
         kafkaTemplate.send(topic,null,objectMapper.writeValueAsString(messageBody));
     }
     public void sendMsg(String topic,String messageBody) throws JsonProcessingException {

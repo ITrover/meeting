@@ -20,6 +20,9 @@ import java.util.List;
 public class UserService {
     @Autowired
     UserMapper userMapper;
+    public User getUserBtID(Integer userId){
+        return userMapper.selectByPrimaryKey(userId);
+    }
 
     /**
      * 增加缓存
@@ -56,6 +59,26 @@ public class UserService {
             throw new UnknownAccountException();
         }else if (password.equals(userList.get(0).getPassword())){
             return JwtService.getToken(userList.get(0));
+        }else {
+            throw new IncorrectCredentialsException();
+        }
+    }
+    public User getLoginUser(String key, String password) throws UnknownAccountException, IncorrectCredentialsException {
+        boolean isMail = key.matches("^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$");
+        UserExample userExample = new UserExample();
+        UserExample.Criteria userExampleCriteria = userExample.createCriteria();
+        List<User> userList = null;
+        if (isMail){
+            userExampleCriteria.andEmailaddrEqualTo(key);
+            userList = userMapper.selectByExample(userExample);
+        }else{
+            userExampleCriteria.andPhoneEqualTo(key);
+            userList = userMapper.selectByExample(userExample);
+        }
+        if (userList.isEmpty()){
+            throw new UnknownAccountException();
+        }else if (password.equals(userList.get(0).getPassword())){
+            return userList.get(0);
         }else {
             throw new IncorrectCredentialsException();
         }

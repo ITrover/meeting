@@ -1,4 +1,11 @@
 spring:
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/* #重启目录
+      exclude: WEB-INF/**
   jackson:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
@@ -26,6 +33,8 @@ spring:
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
 
+
+#服务器的Kafka不稳定，内存小了经常崩，没用了
   kafka:
     bootstrap-servers: 39.108.158.74:9092 # 指定kafka 代理地址，可以多个
     producer: # 生产者
@@ -44,9 +53,3 @@ spring:
       group-id: my-consumer-group
       enable-auto-commit: true
       auto-commit-interval: 1000
-
-
-mybatis:
-  mapper-locations: classpath:meeting/meetingv1/mapper/*Mapper.xml
-
-

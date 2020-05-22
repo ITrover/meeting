@@ -5,13 +5,18 @@ import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.pojo.UserMeetingExample;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserMeetingService {
+    /**
+
+
+
+
+     */
     @Autowired
     UserMeetingMapper userMeetingMapper;
     public int getCount(Byte type, Integer meetingid){
@@ -86,8 +91,7 @@ public class UserMeetingService {
         UserMeetingExample userMeetingExample = new UserMeetingExample();
         UserMeetingExample.Criteria criteria = userMeetingExample.createCriteria();
         criteria.andMeetingidEqualTo(meetId);
-        criteria.andTypeEqualTo(type)
-        ;
+        criteria.andTypeEqualTo(type);
         List<UserMeeting> list = userMeetingMapper.selectByExample(userMeetingExample);
         return list;
     }

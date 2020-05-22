@@ -7,6 +7,8 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import meeting.meetingv1.annotation.PassToken;
 import meeting.meetingv1.annotation.UserLoginToken;
+import meeting.meetingv1.exception.UnloginException;
+import meeting.meetingv1.exception.VerificationException;
 import meeting.meetingv1.pojo.User;
 import meeting.meetingv1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,19 +48,19 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (userLoginToken.required()) {
                 // 执行认证
                 if (token == null) {
-                    throw new RuntimeException("无token，请重新登录");
+                    throw new UnloginException();
                 }
                 // 获取 token 中的 user id
                 String userId;
                 try {
                     userId = JWT.decode(token).getAudience().get(0);
                 } catch (JWTDecodeException j) {
-                    throw new RuntimeException("401");
+                    throw new VerificationException();
                 }
                 Integer uId=new Integer(userId);
                 User user = userService.findUserById(uId);
                 if (user == null) {
-                    throw new RuntimeException("用户不存在，请重新登录");
+                    throw new VerificationException();
                 }
                 // 验证 token
                 JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
@@ -68,10 +70,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new RuntimeException("401 JWT验证失败");
                 }
 
-                 HttpSession session = httpServletRequest.getSession(true);
-                if (session.getAttribute("userId")==null){
-                    session.setAttribute("userId",user.getUserid());
-                }
+                HttpSession session = httpServletRequest.getSession(true);
+                session.setAttribute("userId",user.getUserid());
                 return true;
             }
         }

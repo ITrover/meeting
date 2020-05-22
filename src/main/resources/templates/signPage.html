@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+</head>
+
+<body>
+<h1 th:text="${map['meetingId']}"></h1>
+<h1 th:text="${map['code']}"></h1>
+<script th:inline="javascript">
+    let meetingId = [[${map['meetingId']}]];
+    let code = [[${map['code']}]];
+
+</script>
+</body>
+</html>

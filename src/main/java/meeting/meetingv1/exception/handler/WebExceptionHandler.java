@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ResponseBody
 public class WebExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(WebExceptionHandler.class);
-
     @ExceptionHandler
     public ResultBean signUpException(SignUpColumnException e) {
         log.error("注册字段错误", e);
@@ -48,7 +48,12 @@ public class WebExceptionHandler {
     @ExceptionHandler
     public ResultBean verificationException(VerificationException e) {
         log.error("验证码错误", e);
-        return ResultBean.error(-6, "验证码错误");
+        return ResultBean.error(-6, "权限认证失败！");
+    }
+    @ExceptionHandler
+    public ResultBean unlogin(UnloginException e) {
+        log.error("验证码错误", e);
+        return ResultBean.error(-6, "需要登陆！");
     }
 
 
@@ -78,5 +83,11 @@ public class WebExceptionHandler {
     public ResultBean unknownException(FileNotFindException1 e) {
         log.error("文件不存在", e);
         return ResultBean.error(-12, "文件不存在");
+    }
+    //HttpRequestMethodNotSupportedException
+    @ExceptionHandler
+    public ResultBean unknownMethodException(HttpRequestMethodNotSupportedException e) {
+        log.error("HTTP 方法错误（POST or GET）", e);
+        return ResultBean.error(-1, "HTTP 方法错误（POST or GET），请检查！");
     }
 }

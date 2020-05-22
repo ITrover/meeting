@@ -88,7 +88,7 @@ public class DaoTest {
         userMeeting.setType(b);
         userMeetingService.addRelation(userMeeting);
 
-        System.out.println(userMeeting.getId());
+        System.out.println(userMeeting.getUserid());
     }
 
     @Autowired
@@ -175,6 +175,12 @@ public class DaoTest {
         Meeting meeting1 = objectMapper.readValue(string, Meeting.class);
         Date startTime = meeting.getStartTime();
         System.out.println(encode);
+    }
+
+    @Test
+    void userMeetingTest() {
+        List<UserMeeting> meetingsByBuilder = userMeetingService.getMeetingsByBuilder(17);
+        System.out.println(meetingsByBuilder);
     }
 }
 
