@@ -4,6 +4,7 @@ import meeting.meetingv1.mapper.VoluntaskMapper;
 import meeting.meetingv1.pojo.Voluntask;
 import meeting.meetingv1.pojo.VoluntaskExample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class VoTaskService {
             voluntaskMapper.insert(task);
         }
     }
+    @Cacheable(cacheNames = "Voluntasks",key = "#meetingId")
     public List<Voluntask> getTasks(Integer meetingId){
 
         VoluntaskExample voluntaskExample = new VoluntaskExample();

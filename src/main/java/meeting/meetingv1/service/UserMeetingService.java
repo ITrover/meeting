@@ -1,5 +1,6 @@
 package meeting.meetingv1.service;
 
+import io.swagger.models.auth.In;
 import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.pojo.UserMeeting;
@@ -7,6 +8,7 @@ import meeting.meetingv1.pojo.UserMeetingExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,6 +46,18 @@ public class UserMeetingService {
         }
         userMeetingMapper.insert(userMeeting);
         return true;
+    }
+    public List<String> getRelations(Integer userID,Integer meetingId){
+        UserMeetingExample userMeetingExample = new UserMeetingExample();
+        UserMeetingExample.Criteria criteria = userMeetingExample.createCriteria();
+        criteria.andUseridEqualTo(userID);
+        criteria.andMeetingidEqualTo(meetingId);
+        List<UserMeeting> list = userMeetingMapper.selectByExample(userMeetingExample);
+        List<String> relations = new ArrayList<>();
+        for (UserMeeting u : list){
+            relations.add(u.getType().toString());
+        }
+        return relations;
     }
     public boolean addRelation(UserMeeting userMeeting,boolean creat) throws ParameterException {
         if (userMeeting.getType() != 1){

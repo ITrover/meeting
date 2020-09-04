@@ -115,7 +115,7 @@ public class MeetingController {
     )
     public ResultBean publishMeeting2(
             String meetingJson,
-            String taskjson,
+            @Nullable String taskjson,
             HttpServletRequest request
             ) throws ParameterException, JsonProcessingException, UnsupportedEncodingException {
 
@@ -145,7 +145,9 @@ public class MeetingController {
     @ApiOperation(value = "根据会议id得到会议详细信息",notes = "参数： <br>1、会议ID meetingId   " )
     @ResponseBody
     @RequestMapping(path = "meeting/{meetingId}", method = RequestMethod.GET)
-    public ResultBean getMeetingDetail(@PathVariable("meetingId") int id) {
+    public ResultBean getMeetingDetail(@PathVariable("meetingId") int id
+    ,HttpServletRequest request) {
+        Integer userId = Check.getUserID(request);
         Meeting meeting = meetingService.findById(id);
         Map map = new HashMap();
         Volunt volunt = voluntService.getVoEventByMeetingId(id);
@@ -157,6 +159,10 @@ public class MeetingController {
         map.put("tasks",tasks);
         map.put("guests", guests);
         map.put("files",fileInfoByMeetID);
+        if (userId != null){
+            List<String> relations = userMeetingService.getRelations(userId, id);
+            map.put("relations",relations);
+        }
         return ResultBean.success(map);
     }
 //    @ApiOperation(value = "根据会议id得到会议详细信息",notes = "参数： <br>1、会议ID meetingId   " )

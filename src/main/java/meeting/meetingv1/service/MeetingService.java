@@ -7,6 +7,7 @@ import meeting.meetingv1.mapper.UserMapper;
 import meeting.meetingv1.mapper.UserMeetingMapper;
 import meeting.meetingv1.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class MeetingService {
         return meeting.getMeetingid();//更新：返回插入的会议ID
     }
 
+    @Cacheable(cacheNames = "meetingsByID",key = "#id")
     public Meeting findById(int id) {
         return meetingMapper.selectByPrimaryKey(id);
     }
@@ -73,20 +75,24 @@ public class MeetingService {
         UserMeetingExample userMeetingExample = new UserMeetingExample();
         userMeetingExample.createCriteria().andUseridEqualTo(userid);
         List<UserMeeting> userMeetings = UserMeetingMapper.selectByExample(userMeetingExample);
+        Byte thistype = (byte)mode;
         for (int i = 0; i < userMeetings.size(); i++) {
             Integer meetingid = userMeetings.get(i).getMeetingid();
-            if (mode == 1) {
-                MeetingExample meetingExample = new MeetingExample();
-                meetingExample.createCriteria().andStartTimeLessThan(new Date()).andMeetingidEqualTo(meetingid);
-                Meeting meeting = meetingMapper.selectByExample(meetingExample).get(0);
-                meetings.add(meeting);
+            if (userMeetings.get(i).getType().equals(thistype)){
+                meetings.add(meetingMapper.selectByPrimaryKey(meetingid));
             }
-            if (mode == 0) {
-                MeetingExample meetingExample = new MeetingExample();
-                meetingExample.createCriteria().andStartTimeGreaterThan(new Date()).andMeetingidEqualTo(meetingid);
-                Meeting meeting = meetingMapper.selectByExample(meetingExample).get(0);
-                meetings.add(meeting);
-            }
+//            if (mode == 1) {
+//                MeetingExample meetingExample = new MeetingExample();
+//                meetingExample.createCriteria().andStartTimeLessThan(new Date()).andMeetingidEqualTo(meetingid);
+//                Meeting meeting = meetingMapper.selectByExample(meetingExample).get(0);
+//                meetings.add(meeting);
+//            }
+//            if (mode == 0) {
+//                MeetingExample meetingExample = new MeetingExample();
+//                meetingExample.createCriteria().andStartTimeGreaterThan(new Date()).andMeetingidEqualTo(meetingid);
+//                Meeting meeting = meetingMapper.selectByExample(meetingExample).get(0);
+//                meetings.add(meeting);
+//            }
         }
         return meetings;
     }

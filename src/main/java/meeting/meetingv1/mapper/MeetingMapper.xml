@@ -263,7 +263,7 @@
 
   <!--自定义的sql-->
   <!--分页-->
-  <select id="selectMeetings" resultType="meeting.meetingv1.pojo.Meeting">
+  <select id="selectMeetings" resultType="meeting.meetingv1.pojo.Meeting" resultMap="BaseResultMap">
         select *
         from meeting
         limit #{offset}, #{limit}

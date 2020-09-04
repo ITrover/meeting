@@ -4,6 +4,7 @@ import meeting.meetingv1.mapper.GuestMapper;
 import meeting.meetingv1.pojo.Guest;
 import meeting.meetingv1.pojo.GuestExample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class GuestService {
         guestMapper.deleteByPrimaryKey(guest);
         return true;
     }
+    @Cacheable(cacheNames = {"guestListFormeeting"},key = "#meetingid")
     public List<Guest> findByGuestMeetingId(int meetingid){
         GuestExample guestExample = new GuestExample();
         guestExample.createCriteria().andMeetingidEqualTo(meetingid);

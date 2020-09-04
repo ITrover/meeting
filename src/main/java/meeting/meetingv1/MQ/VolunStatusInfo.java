@@ -1,5 +1,8 @@
 package meeting.meetingv1.MQ;
 
+/**
+ * 用户和会议状态，在消息队列使用的封装类
+ */
 public class VolunStatusInfo {
     private int meetingId;
     private int userId;

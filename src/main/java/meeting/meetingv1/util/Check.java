@@ -1,5 +1,8 @@
 package meeting.meetingv1.util;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import meeting.meetingv1.exception.VerificationException;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.service.UserMeetingService;
 
@@ -25,6 +28,22 @@ public class Check {
     }
     public static Integer getUserID(HttpServletRequest httpServletRequest){
         HttpSession session = httpServletRequest.getSession(false);
-        return (Integer)session.getAttribute("userId");
+        if (session==null){
+            return null;
+        }
+        Object userId1 = session.getAttribute("userId");
+        Integer userId = userId1==null?null:(Integer)userId1;
+        if (userId == null){    
+            String token = httpServletRequest.getHeader("token");// 从 http 请求头中取出 token
+            String userIdStr;
+            try {
+                userIdStr = JWT.decode(token).getAudience().get(0);
+                userId = new Integer(userIdStr);
+            } catch (JWTDecodeException j) {
+                userId= null;
+            }
+        }
+        return userId;
     }
+
 }
