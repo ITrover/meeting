@@ -10,9 +10,9 @@ spring:
     date-format: yyyy-MM-dd
     time-zone: GMT+8
   datasource:
-    username: root
-    password: 78652Acd@
-    url: jdbc:mysql://39.108.158.74:3306/meeting?serverTimezone=Asia/Shanghai
+#    username: root
+#    password: 78652Acd@
+#    url: jdbc:mysql://39.108.158.74:3306/meeting?serverTimezone=Asia/Shanghai
     initialization-mode: always
     type: com.alibaba.druid.pool.DruidDataSource
 #    Druid配置
@@ -32,9 +32,53 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  profiles:
+    active: pro
 
-
-#服务器的Kafka不稳定，内存小了经常崩，没用了
+---
+# 正式发布,使用学校的服务器
+spring:
+  datasource:
+    username: root
+    password: zzmxqsmsp1syyrps.
+    url: jdbc:mysql://localhost:3306/meeting?serverTimezone=Asia/Shanghai
+  profiles: pro
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
+  kafka:
+    bootstrap-servers: localhost:9092 # 指定kafka 代理地址，可以多个
+    producer: # 生产者
+      retries: 1 # 设置大于0的值，则客户端会将发送失败的记录重新发送
+      # 每次批量发送消息的数量
+      batch-size: 16384
+      buffer-memory: 33554432
+      # 指定消息key和消息体的编解码方式
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      listener:
+        #      并行执行的listener线程数
+        concurrency: 4
+      consumer:
+        #      消费者组名
+        group-id: my-consumer-group
+        enable-auto-commit: true
+        auto-commit-interval: 1000
+---
+# 调试环境，使用阿里云服务器
+spring:
+  datasource:
+    username: root
+    password: 78652Acd@
+    url: jdbc:mysql://39.108.158.74:3306/meeting?serverTimezone=Asia/Shanghai
+  profiles: dev
+  redis:
+    host: 39.108.158.74
+    password: mypassword
+    port: 6379
+    database: 1
+  #服务器的Kafka不稳定，内存小了经常崩，没用了
   kafka:
     bootstrap-servers: 39.108.158.74:9092 # 指定kafka 代理地址，可以多个
     producer: # 生产者
@@ -45,11 +89,11 @@ spring:
       # 指定消息key和消息体的编解码方式
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    listener:
-#      并行执行的listener线程数
-      concurrency: 4
-    consumer:
-#      消费者组名
-      group-id: my-consumer-group
-      enable-auto-commit: true
-      auto-commit-interval: 1000
+      listener:
+        #      并行执行的listener线程数
+        concurrency: 4
+      consumer:
+        #      消费者组名
+        group-id: my-consumer-group
+        enable-auto-commit: true
+        auto-commit-interval: 1000
