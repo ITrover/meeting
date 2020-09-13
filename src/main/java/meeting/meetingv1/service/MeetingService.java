@@ -40,6 +40,14 @@ public class MeetingService {
         int result = meetingMapper.insert(meeting);
         return meeting.getMeetingid();//更新：返回插入的会议ID
     }
+    public  void deleteMeeting(Integer meetingId){        //删除会议
+        if(meetingId == null)
+        {
+            throw  new IllegalArgumentException("参数不能为空！");
+        }
+        int result = meetingMapper.deleteByPrimaryKey(meetingId);
+
+    }
 
     @Cacheable(cacheNames = "meetingsByID",key = "#id")
     public Meeting findById(int id) {

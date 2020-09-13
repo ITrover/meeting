@@ -1,6 +1,5 @@
 package meeting.meetingv1;
 
-import javafx.application.Application;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

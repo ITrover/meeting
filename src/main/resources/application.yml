@@ -34,6 +34,7 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   profiles:
     active: pro
+debug: true
 
 ---
 # 正式发布,使用学校的服务器
@@ -45,7 +46,7 @@ spring:
     url: jdbc:mysql://202.202.43.92:3306/meeting?serverTimezone=Asia/Shanghai
   profiles: pro
   redis:
-    host: localhost
+    host: 202.202.43.92
     port: 6379
     database: 1
   kafka:

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import io.swagger.models.auth.In;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.ParameterException;
@@ -22,13 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @Api(tags = "会议相关接口")
+@Slf4j
 public class MeetingController {
     @Autowired
     MeetFileSercice meetFileSercice;
@@ -139,6 +138,23 @@ public class MeetingController {
     }
 //[{"taskinfo":"测试是的 的的的的","workingtime":8,"numbers":2},{"taskinfo":"测试是的 的的的的","workingtime":8,"numbers":2}]
 
+    //删除会议
+    //@UserLoginToken//登陆权限验证
+    @ResponseBody
+    @RequestMapping(path = "meeting/delete", method = RequestMethod.POST)
+    @ApiOperation(value = "删除会议信息",notes = "参数： 会议id")
+    public ResultBean deleteMeeting(Integer meetingId) throws ParameterException {
+    meetingService.deleteMeeting(meetingId);//数据库主键
+//    List<UserMeeting> list= userMeetingService.getVolunteers(meetingId);
+//    UserMeeting userMeeting = list.get(0);
+//    userMeetingService.delete(userMeeting);
+    Map<String,Integer> map=new HashMap<>();
+    map.put("meetingId",meetingId);
+    logger.info("会议删除完成,会议Id"+meetingId);
+    return ResultBean.success(map);
+
+    }
+
     /**
      *
      * @param id
@@ -152,7 +168,7 @@ public class MeetingController {
     , HttpServletRequest request) {
         Integer userId = Check.getUserID(request);
         Meeting meeting = meetingService.findById(id);
-        Map map = new HashMap();
+        Map<String,Object> map = new HashMap<>();
         Volunt volunt = voluntService.getVoEventByMeetingId(id);
         List<Guest> guests = guestService.findByGuestMeetingId(id);
         List<Voluntask> tasks = voTaskService.getTasks(id);
@@ -210,6 +226,14 @@ public class MeetingController {
     public ResultBean findMeetings(int offset, int limit) {
         List<Meeting> meetings = meetingService.findMeetings(offset, limit);
         System.out.println(offset);
+        //排序根据时间
+        Collections.sort(meetings, new Comparator<Meeting>() {
+            @Override
+            public int compare(Meeting o1, Meeting o2) {
+                int flag =o1.getStartTime().compareTo(o2.getStartTime());
+                return  -flag;
+            }
+        });
         HashMap hashMap = new HashMap();
         hashMap.put("meetings", meetings);
         return ResultBean.success(hashMap);
