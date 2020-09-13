@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.pojo.*;
@@ -14,7 +15,6 @@ import meeting.meetingv1.util.ResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @Api(tags = "会议相关接口")
@@ -146,7 +149,7 @@ public class MeetingController {
     @ResponseBody
     @RequestMapping(path = "meeting/{meetingId}", method = RequestMethod.GET)
     public ResultBean getMeetingDetail(@PathVariable("meetingId") int id
-    ,HttpServletRequest request) {
+    , HttpServletRequest request) {
         Integer userId = Check.getUserID(request);
         Meeting meeting = meetingService.findById(id);
         Map map = new HashMap();
@@ -206,6 +209,7 @@ public class MeetingController {
     @RequestMapping(path = "/meetings/home", method = RequestMethod.GET)
     public ResultBean findMeetings(int offset, int limit) {
         List<Meeting> meetings = meetingService.findMeetings(offset, limit);
+        System.out.println(offset);
         HashMap hashMap = new HashMap();
         hashMap.put("meetings", meetings);
         return ResultBean.success(hashMap);
@@ -215,8 +219,8 @@ public class MeetingController {
     @ResponseBody
     @RequestMapping(path = "/meetings/my/{mode}", method = RequestMethod.GET)
     @ApiOperation(value = "查询自己有关的会议",notes = "mode可选 1、2、3、4、5")
-    @UserLoginToken
-    public ResultBean findMeetingsByUserIdAndTime(@PathVariable("mode") Integer mode,HttpServletRequest request) {
+//    @UserLoginToken
+    public ResultBean findMeetingsByUserIdAndTime(@PathVariable("mode") Integer mode, HttpServletRequest request) {
         Integer userID = Check.getUserID(request);
         List<Meeting> meetings = meetingService.findMeetingsByUserIdAndTime(userID,mode);
         HashMap hashMap = new HashMap();
@@ -227,7 +231,7 @@ public class MeetingController {
     //与我有关会议1
     @ApiOperation(value = "根据id得到和我有关的会议",notes = "参数： <br>1、userid  我的id  " +
             " <br>2、登陆token  ")
-    @UserLoginToken
+//    @UserLoginToken
     @ResponseBody
     @RequestMapping(path = "/meetings/my", method = RequestMethod.GET)
     public ResultBean findMeetingsByUserId(int userid) {
@@ -244,13 +248,56 @@ public class MeetingController {
     @ResponseBody
     @RequestMapping(path = "/meetings/dy", method = RequestMethod.GET)
     public ResultBean findMeetingsDy(@Nullable Integer type, @Nullable String location,
-                                     @Nullable Date beginTime,@Nullable Date endTime,@Nullable String name) {
+                                     @Nullable Date beginTime, @Nullable Date endTime, @Nullable String name) {
 //        int meetingsType = meetingService.findMeetingsType(type);
         List<Meeting> meetings = meetingService.findMeetingsDy(type, location, endTime,beginTime, name);
         HashMap hashMap = new HashMap();
         hashMap.put("meetings", meetings);
         return ResultBean.success(hashMap);
     }
+    @ApiOperation(value = "返回热门会议数据")
+    @ResponseBody
+    @GetMapping("/meetings/hot")
+    public ResultBean HotMeeting(){
+        List<Meeting> meetings=meetingService.findMeetings(0,10);
+        Map map=new HashMap();
+        map.put("hot meetings",meetings);
+        return ResultBean.success(map);
+    }
 
+    @ApiOperation(value="返回会议分类的分页会议数据")
+    @ResponseBody
+    @GetMapping("/meetings/{typeid}")
+    public ResultBean findMeetingByTypeId(@PathVariable("typeid") Integer typeid){
+        List<Meeting> meetings=meetingService.findMeetingByTypeId(typeid);
+        return ResultBean.success(meetings);
+    }
+//    @ApiOperation(value="返回会议分页的文艺会议数据")
+//    @ResponseBody
+//    @GetMapping("/meeting/art")
+//    public ResultBean ArtMeeting(){
+//        List<Meeting> meetings=meetingService.findMeetings(10,5);
+//        Map map=new HashMap();
+//        map.put("art",meetings);
+//        return ResultBean.success(meetings);
+//    }
+//    @ApiOperation(value="返回会议分页的招聘会议数据")
+//    @ResponseBody
+//    @GetMapping("/meeting/job")
+//    public ResultBean JobMeeting(){
+//        List<Meeting> meetings=meetingService.findMeetings(20,5);
+//        Map map=new HashMap();
+//        map.put("job",meetings);
+//        return ResultBean.success(meetings);
+//    }
+//    @ApiOperation(value="返回会议分页的未知类型会议数据")
+//    @ResponseBody
+//    @GetMapping("/meeting/unknown")
+//    public ResultBean UnknownMeeting(){
+//        List<Meeting> meetings=meetingService.findMeetings(30,5);
+//        Map map=new HashMap();
+//        map.put("unknown",meetings);
+//        return ResultBean.success(meetings);
+//    }
 
 }

@@ -1,7 +1,10 @@
 package meeting.meetingv1.mapper;
 
+import io.swagger.models.auth.In;
+import meeting.meetingv1.pojo.Meeting;
 import meeting.meetingv1.pojo.Message;
 import meeting.meetingv1.pojo.MessageExample;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -61,4 +64,5 @@ public interface MessageMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Message record);
+
 }

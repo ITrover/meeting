@@ -1,6 +1,7 @@
 package meeting.meetingv1.service;
 
 import com.sun.mail.imap.protocol.ID;
+import io.swagger.models.auth.In;
 import meeting.meetingv1.mapper.MeetingMapper;
 import meeting.meetingv1.mapper.MeetingtypeMapper;
 import meeting.meetingv1.mapper.UserMapper;
@@ -140,5 +141,9 @@ public class MeetingService {
         Date date = new Date();
         List<Meeting> meetings = meetingMapper.selectMeetings(offset, limit, orderMode, date);
         return meetings;
+    }
+
+    public List<Meeting> findMeetingByTypeId(Integer typeid){
+        return meetingMapper.findByTypeId(typeid);
     }
 }
