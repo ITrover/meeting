@@ -2,6 +2,7 @@ package meeting.meetingv1.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import meeting.meetingv1.annotation.SysLog;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.FileInfoStoreException;
 import meeting.meetingv1.pojo.Guest;
@@ -50,13 +51,13 @@ public class GuestController {
                        "<br>4、登陆token" +
                     "<br>嘉宾姓名name、职位position、航班信息flightInfo、身份证号personId、嘉宾电话guestTel"
                     )
-    @UserLoginToken
+    //@UserLoginToken
     public ResultBean add(HttpServletRequest request,Integer meetingId,String introduction,
                           @Nullable String name, String position, String flightInfo, String personId,String guestTel
     ,@Nullable @RequestParam("icon") MultipartFile uploadFile) throws FileInfoStoreException {
-        if (!Check.checkUp(request,userMeetingService,meetingId)){
+        /*if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
-        }
+        }*/
         String newName = null;
         if (uploadFile != null){
             File folder = getRootPath(meetingFileRootPath,"guest");
@@ -112,6 +113,7 @@ public class GuestController {
         response.getOutputStream().write(bytes);
     }
 
+
     @ResponseBody
     @GetMapping("guest/{meetingId}")
     @ApiOperation(value = "获取嘉宾信息(文本)",notes = "参数： <br>1、相关的会议id meetingId<br>")
@@ -123,13 +125,13 @@ public class GuestController {
     }
 
     @ResponseBody
-    @UserLoginToken
+    //@UserLoginToken
     @DeleteMapping("guest/{meetingId}")
     @ApiOperation(value = "会议发起者删除嘉宾",notes = "参数： <br>1、相关的会议id meetingId<br>")
     public ResultBean delete(@PathVariable Integer meetingId,Integer guestId,HttpServletRequest request) {
-        if (!Check.checkUp(request,userMeetingService,meetingId)){
+        /*if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
-        }
+        }*/
         Guest guest = new Guest();
         guest.setGuestid(guestId);
         guest.setMeetingid(meetingId);
@@ -148,7 +150,7 @@ public class GuestController {
                     "6、嘉宾姓名 name" +
                     "7、嘉宾电话 guestTel"
     )
-    @UserLoginToken
+    //@UserLoginToken
     public ResultBean update(HttpServletRequest request,Integer guestId,Integer meetingId,
                              @Nullable String introduction,
                              @Nullable String name,
@@ -157,9 +159,9 @@ public class GuestController {
                              @Nullable String personId,
                              @Nullable String guestTel
             ,@Nullable @RequestParam("icon") MultipartFile uploadFile) throws FileInfoStoreException {
-        if (!Check.checkUp(request,userMeetingService,meetingId)){
+        /*if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
-        }
+        }*/
         String newName = null;
         if (uploadFile != null){
             File folder = getRootPath(meetingFileRootPath,meetingId+"/guest");
