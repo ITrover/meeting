@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.pojo.*;
@@ -264,41 +265,39 @@ public class MeetingController {
         return ResultBean.success(map);
     }
 
-    @ApiOperation(value="返回会议分页的分享会议数据")
+    @ApiOperation(value="返回会议分类的分页会议数据")
     @ResponseBody
-    @GetMapping("/meeting/share")
-    public ResultBean ShareMeeting(){
-        List<Meeting> meetings=meetingService.findMeetings(0,5);
-        Map map=new HashMap();
-        map.put("share",meetings);
+    @GetMapping("/meetings/{typeid}")
+    public ResultBean findMeetingByTypeId(@PathVariable("typeid") Integer typeid){
+        List<Meeting> meetings=meetingService.findMeetingByTypeId(typeid);
         return ResultBean.success(meetings);
     }
-    @ApiOperation(value="返回会议分页的文艺会议数据")
-    @ResponseBody
-    @GetMapping("/meeting/art")
-    public ResultBean ArtMeeting(){
-        List<Meeting> meetings=meetingService.findMeetings(10,5);
-        Map map=new HashMap();
-        map.put("art",meetings);
-        return ResultBean.success(meetings);
-    }
-    @ApiOperation(value="返回会议分页的招聘会议数据")
-    @ResponseBody
-    @GetMapping("/meeting/job")
-    public ResultBean JobMeeting(){
-        List<Meeting> meetings=meetingService.findMeetings(20,5);
-        Map map=new HashMap();
-        map.put("job",meetings);
-        return ResultBean.success(meetings);
-    }
-    @ApiOperation(value="返回会议分页的未知类型会议数据")
-    @ResponseBody
-    @GetMapping("/meeting/unknown")
-    public ResultBean UnknownMeeting(){
-        List<Meeting> meetings=meetingService.findMeetings(30,5);
-        Map map=new HashMap();
-        map.put("unknown",meetings);
-        return ResultBean.success(meetings);
-    }
+//    @ApiOperation(value="返回会议分页的文艺会议数据")
+//    @ResponseBody
+//    @GetMapping("/meeting/art")
+//    public ResultBean ArtMeeting(){
+//        List<Meeting> meetings=meetingService.findMeetings(10,5);
+//        Map map=new HashMap();
+//        map.put("art",meetings);
+//        return ResultBean.success(meetings);
+//    }
+//    @ApiOperation(value="返回会议分页的招聘会议数据")
+//    @ResponseBody
+//    @GetMapping("/meeting/job")
+//    public ResultBean JobMeeting(){
+//        List<Meeting> meetings=meetingService.findMeetings(20,5);
+//        Map map=new HashMap();
+//        map.put("job",meetings);
+//        return ResultBean.success(meetings);
+//    }
+//    @ApiOperation(value="返回会议分页的未知类型会议数据")
+//    @ResponseBody
+//    @GetMapping("/meeting/unknown")
+//    public ResultBean UnknownMeeting(){
+//        List<Meeting> meetings=meetingService.findMeetings(30,5);
+//        Map map=new HashMap();
+//        map.put("unknown",meetings);
+//        return ResultBean.success(meetings);
+//    }
 
 }

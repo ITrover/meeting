@@ -2,6 +2,7 @@ package meeting.meetingv1.mapper;
 
 import meeting.meetingv1.pojo.Meeting;
 import meeting.meetingv1.pojo.MeetingExample;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
 import java.util.List;
@@ -75,4 +76,8 @@ public interface MeetingMapper {
      * 查询行数
      * */
     int selectMeetingRows();
+
+
+    @Select("select * from meeting where typeid=#{typeid}")
+    List<Meeting> findByTypeId(Integer typeid);
 }
