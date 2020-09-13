@@ -41,7 +41,8 @@ spring:
   datasource:
     username: root
     password: zzmxqsmsp1syyrps.
-    url: jdbc:mysql://localhost:3306/meeting?serverTimezone=Asia/Shanghai
+    # 部署到服务器时，地址替换成localhost
+    url: jdbc:mysql://202.202.43.92:3306/meeting?serverTimezone=Asia/Shanghai
   profiles: pro
   redis:
     host: localhost

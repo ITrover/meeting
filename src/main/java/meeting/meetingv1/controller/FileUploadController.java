@@ -44,7 +44,7 @@ public class FileUploadController {
     @Autowired
     UserMeetingService userMeetingService;
 
-    @UserLoginToken
+    //@UserLoginToken
     @PostMapping("/uploadimg")
     @ApiOperation(value = "上传用户头像",notes = "参数：1、用户的电话号 phone 2、文件上传时name应为img 3、登陆token <br> 获取头像方式: 在上传图片后会将文件名以随机生成的uuid命名，文件名在用户字段的avatar中，直接访问服务器的80端口即可<br>如：172.0.0.1:80/1.png")
     public ResultBean upload(@RequestParam("img")MultipartFile uploadFile, HttpServletRequest request, String phone) {
@@ -74,6 +74,7 @@ public class FileUploadController {
             return ResultBean.error(-8,"文件保存失败");
         }
     }
+
     @ApiOperation(value = "获取用户头像",notes = "参数： <br>1、文件名")
     @GetMapping(value = "/userIcon/{filename}")
     public void getMeetIcon(@PathVariable String filename, HttpServletResponse response) throws IOException {
@@ -166,7 +167,7 @@ public class FileUploadController {
     }
 
 
-    @UserLoginToken
+    //@UserLoginToken
     @DeleteMapping("/file")
     @ApiOperation(value = "删除一个会议相关文件",notes = "参数： <br>1、会议ID meetingId<br>2、文件名 fileId <br>注意：只有会议创建者才有权限删除文件，否则返回对应错误信息")
     public ResultBean deleteFile(HttpServletRequest httpServletRequest,Integer meetingId,Integer fileId){
@@ -175,7 +176,7 @@ public class FileUploadController {
         List<UserMeeting> meetingsByBuilder = userMeetingService.getMeetingsByBuilder(userId);
         boolean flag = false;
         for (UserMeeting userMeeting :meetingsByBuilder){
-            if (userMeeting.getUserid().equals(meetingId)){
+            if (userMeeting.getMeetingid().equals(meetingId)){
                 flag = true;
             }
         }
