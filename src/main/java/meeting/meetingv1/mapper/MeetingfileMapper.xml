@@ -164,4 +164,12 @@
       name = #{name,jdbcType=VARCHAR}
     where fileid = #{fileid,jdbcType=INTEGER}
   </update>
+
+  <select id="selectByMeetingId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from meetingfile
+    where meetingid = #{meetingId}
+  </select>
+
 </mapper>

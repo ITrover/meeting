@@ -2,6 +2,7 @@ package meeting.meetingv1.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.ParameterException;
 import meeting.meetingv1.pojo.UserMeeting;
@@ -24,23 +25,23 @@ import java.util.Map;
 
 @RestController
 @Api(tags = "用户与会议的交互接口")
+@Slf4j
 public class UserMeetingControllor {
 
     @Autowired
     UserMeetingService userMeetingService;
 
-    @UserLoginToken
+//    @UserLoginToken
     @PostMapping("/preference/{type}")
     @ApiOperation(value = "参加/收藏会议",notes = "参数： <br>1、登陆token<br>2、路径变量操作类型（2为参加 3为收藏 ）<br>3、会议id meetingId")
     public ResultBean addPreference(@PathVariable("type") Integer type, Integer meetingId, HttpServletRequest request) throws ParameterException {
         userMeetingService.addRelation(new UserMeeting(Check.getUserID(request),meetingId,new Byte(type.toString())));
         return ResultBean.success();
     }
-    @UserLoginToken
+//    @UserLoginToken
     @PostMapping("/quit/{type}/{meetingId}")
     @ApiOperation(value = "退出会议 取消收藏会议",notes = "参数： <br>1、登陆token<br>2、操作类型 type （2为参加 3为收藏 ）<br>3、路径变量会议id meetingId")
     public ResultBean preference(@PathVariable("meetingId") Integer meetingId,@PathVariable Integer type, HttpServletRequest request) throws ParameterException {
-
         userMeetingService.delete(new UserMeeting(Check.getUserID(request),meetingId,new Byte(type.toString())));
         return ResultBean.success();
     }
@@ -52,7 +53,7 @@ public class UserMeetingControllor {
      * @return
      */
     @GetMapping("/preference/{type}")
-    @UserLoginToken
+//    @UserLoginToken
     @ApiOperation(value = "获取与自己相关的会议信息",notes = "参数： <br>1、路径变量中类型：（1为创建 2为参加 3为收藏）<br>2、登陆toke" +
             "<br>一个成功的请求：" +
             "{\n" +
@@ -79,7 +80,7 @@ public class UserMeetingControllor {
     @Autowired
     UserService userService;
     @GetMapping("/meetPreference/{type}")
-    @UserLoginToken
+//    @UserLoginToken
     @ApiOperation(value = "主办方获取会议 被参加、收藏、申请志愿者的详细信息"
             ,notes = "参数： <br>1、会议id meetingId2、路径变量操作类型（2为参加 3为收藏），登陆token" +
             "<br>包括参会者的userName、手机、邮箱")

@@ -1,5 +1,8 @@
 package meeting.meetingv1;
 
+import meeting.meetingv1.controller.MeetingController;
+import meeting.meetingv1.mapper.MeetingfileMapper;
+import meeting.meetingv1.service.MeetFileSercice;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +22,11 @@ import java.io.File;
 public class FileTest {
     @Autowired
     HttpServletRequest httpServletRequest;
-    @Value("${user.avatar.path}")
-    String avater;
+
+    @Autowired
+    MeetFileSercice meetFileSercice;
     @Test
     void filePathTest(){
+        System.out.println(meetFileSercice.getFileInfoByMeetID(152));
     }
 }

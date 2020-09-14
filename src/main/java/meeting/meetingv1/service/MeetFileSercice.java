@@ -23,11 +23,12 @@ public class MeetFileSercice {
         meetingfileMapper.deleteByPrimaryKey(fileID);
         return meetingfile.getMeetingid();
     }
-    @Cacheable(cacheNames = {"Meetingfile"},key = "#meetID")
+//    @Cacheable(cacheNames = {"Meetingfile"},key = "#meetID")
     public List<Meetingfile> getFileInfoByMeetID(Integer meetID){
         MeetingfileExample meetingfileExample = new MeetingfileExample();
         MeetingfileExample.Criteria criteria = meetingfileExample.createCriteria();
         criteria.andMeetingidEqualTo(meetID);
         return meetingfileMapper.selectByExample(meetingfileExample);
+//        return meetingfileMapper.selectByMeetingId(meetID);
     }
 }

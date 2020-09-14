@@ -61,4 +61,6 @@ public interface MeetingfileMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Meetingfile record);
+
+    List<Meetingfile> selectByMeetingId(Integer meetingId);
 }
