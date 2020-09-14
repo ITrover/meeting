@@ -47,23 +47,25 @@ public class MeetingController {
     UserMeetingService userMeetingService;
     @Autowired
     JsonUtil jsonUtil;
-//    @Autowired
+    //    @Autowired
     Logger logger = LoggerFactory.getLogger(this.getClass());
     Byte CREAT_RELATION = 1;
+
     @ResponseBody
     @GetMapping("meetingTypes")
-    public ResultBean getType(){
-        Map<String,List> map = new HashMap<>();
-        map.put("types",meetingTypeService.getTypes());
+    public ResultBean getType() {
+        Map<String, List> map = new HashMap<>();
+        map.put("types", meetingTypeService.getTypes());
         return ResultBean.success(map);
     }
+
     @ResponseBody
     @RequestMapping(path = "meeting/count", method = RequestMethod.POST)
     @ApiOperation(value = "获取会议总数")
     public ResultBean countOfMeetings() {
         Integer integer = meetingService.countOfMeetings();
-        HashMap<String ,Integer> map = new HashMap<>();
-        map.put("count",integer);
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("count", integer);
         return ResultBean.success(map);
     }
 
@@ -91,6 +93,7 @@ public class MeetingController {
 
     /**
      * 对应手机端的请求，日期格式：yyyy-MM-dd HH:mm:ss
+     *
      * @param meeting
      * @return
      * @throws ParameterException
@@ -98,7 +101,7 @@ public class MeetingController {
     @ResponseBody
     @UserLoginToken
     @RequestMapping(path = "meeting/put", method = RequestMethod.POST)
-    @ApiOperation(value = "添加会议信息（文本部分）",notes =
+    @ApiOperation(value = "添加会议信息（文本部分）", notes =
             "参数： <br>1、会议实体序列化后的编码后（UTF8编码）Json串 ：meetingJson  " +
                     "<br>其中未编码的字符串如下" +
                     "<br>{\"meetingid\":null,\"mName\":null,\"location\":null," +
@@ -119,21 +122,21 @@ public class MeetingController {
             String meetingJson,
             @Nullable String taskjson,
             HttpServletRequest request
-            ) throws ParameterException, JsonProcessingException, UnsupportedEncodingException {
+    ) throws ParameterException, JsonProcessingException, UnsupportedEncodingException {
 
-        logger.info("收到编码Json："+meetingJson);
+        logger.info("收到编码Json：" + meetingJson);
         Meeting meeting = jsonUtil.decodeUTF8JsonToMeeting(meetingJson);
 
         Integer meetingId = meetingService.addMeeting(meeting);
-        userMeetingService.addRelation(new UserMeeting(Check.getUserID(request),meetingId,CREAT_RELATION),true);
-        if (taskjson != null){
+        userMeetingService.addRelation(new UserMeeting(Check.getUserID(request), meetingId, CREAT_RELATION), true);
+        if (taskjson != null) {
             String decode = URLDecoder.decode(taskjson, "utf-8");
             Voluntask[] tasks = objectMapper.readValue(decode, Voluntask[].class);
-            voTaskService.addTask(tasks,meetingId);
+            voTaskService.addTask(tasks, meetingId);
         }
-        Map<String,Integer> map = new HashMap<>();
-        map.put("meetingId",meeting.getMeetingid());
-        logger.info("会议添加完成"+meeting.toString());
+        Map<String, Integer> map = new HashMap<>();
+        map.put("meetingId", meeting.getMeetingid());
+        logger.info("会议添加完成" + meeting.toString());
         return ResultBean.success(map);
     }
 //[{"taskinfo":"测试是的 的的的的","workingtime":8,"numbers":2},{"taskinfo":"测试是的 的的的的","workingtime":8,"numbers":2}]
@@ -141,46 +144,44 @@ public class MeetingController {
     //删除会议
     //@UserLoginToken//登陆权限验证
     @ResponseBody
-    @RequestMapping(path = "meeting/delete", method = RequestMethod.POST)
-    @ApiOperation(value = "删除会议信息",notes = "参数： 会议id")
-    public ResultBean deleteMeeting(Integer meetingId) throws ParameterException {
-    meetingService.deleteMeeting(meetingId);//数据库主键
+    @DeleteMapping(path = "meeting")
+    @ApiOperation(value = "删除会议信息", notes = "参数： 会议id")
+    public ResultBean deleteMeeting(@RequestParam(required = true) Integer meetingId) throws ParameterException {
+        meetingService.deleteMeeting(meetingId);//数据库主键
 //    List<UserMeeting> list= userMeetingService.getVolunteers(meetingId);
 //    UserMeeting userMeeting = list.get(0);
 //    userMeetingService.delete(userMeeting);
-    Map<String,Integer> map=new HashMap<>();
-    map.put("meetingId",meetingId);
-    logger.info("会议删除完成,会议Id"+meetingId);
-    return ResultBean.success(map);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("meetingId", meetingId);
+        logger.info("会议删除完成,会议Id" + meetingId);
+        return ResultBean.success(map);
 
     }
 
     /**
-     *
      * @param id
      * @return
      */
     //    通过id得到会议详情页1
-    @ApiOperation(value = "根据会议id得到会议详细信息",notes = "参数： <br>1、会议ID meetingId   " )
+    @ApiOperation(value = "根据会议id得到会议详细信息", notes = "参数： <br>1、会议ID meetingId   ")
     @ResponseBody
     @RequestMapping(path = "meeting/{meetingId}", method = RequestMethod.GET)
-    public ResultBean getMeetingDetail(@PathVariable("meetingId") int id
-    , HttpServletRequest request) {
+    public ResultBean getMeetingDetail(@PathVariable("meetingId") int id, HttpServletRequest request) {
         Integer userId = Check.getUserID(request);
         Meeting meeting = meetingService.findById(id);
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         Volunt volunt = voluntService.getVoEventByMeetingId(id);
         List<Guest> guests = guestService.findByGuestMeetingId(id);
         List<Voluntask> tasks = voTaskService.getTasks(id);
         List<Meetingfile> fileInfoByMeetID = meetFileSercice.getFileInfoByMeetID(id);
         map.put("meeting", meeting);
         map.put("volunt", volunt);
-        map.put("tasks",tasks);
+        map.put("tasks", tasks);
         map.put("guests", guests);
-        map.put("files",fileInfoByMeetID);
-        if (userId != null){
+        map.put("files", fileInfoByMeetID);
+        if (userId != null) {
             List<String> relations = userMeetingService.getRelations(userId, id);
-            map.put("relations",relations);
+            map.put("relations", relations);
         }
         return ResultBean.success(map);
     }
@@ -213,14 +214,14 @@ public class MeetingController {
         Guest guest = new Guest();
         guest.setMeetingid(1);
         guest.setGuestid(4);
-        guestHashMap.put("guest1",guest);
-        guestHashMap.put("guest2",guest);
+        guestHashMap.put("guest1", guest);
+        guestHashMap.put("guest2", guest);
         return ResultBean.success(guestHashMap);
     }
 
 //    分页获取首页会议1
 
-    @ApiOperation(value = "根据会议首页分页的会议数据",notes = "参数: 1.起始位置 offset 2. 条数 limit")
+    @ApiOperation(value = "根据会议首页分页的会议数据", notes = "参数: 1.起始位置 offset 2. 条数 limit")
     @ResponseBody
     @RequestMapping(path = "/meetings/home", method = RequestMethod.GET)
     public ResultBean findMeetings(int offset, int limit) {
@@ -230,8 +231,8 @@ public class MeetingController {
         Collections.sort(meetings, new Comparator<Meeting>() {
             @Override
             public int compare(Meeting o1, Meeting o2) {
-                int flag =o1.getStartTime().compareTo(o2.getStartTime());
-                return  -flag;
+                int flag = o1.getStartTime().compareTo(o2.getStartTime());
+                return -flag;
             }
         });
         HashMap hashMap = new HashMap();
@@ -242,18 +243,18 @@ public class MeetingController {
     //与我有关的会议+时间查询 没测通
     @ResponseBody
     @RequestMapping(path = "/meetings/my/{mode}", method = RequestMethod.GET)
-    @ApiOperation(value = "查询自己有关的会议",notes = "mode可选 1、2、3、4、5")
+    @ApiOperation(value = "查询自己有关的会议", notes = "mode可选 1、2、3、4、5")
 //    @UserLoginToken
     public ResultBean findMeetingsByUserIdAndTime(@PathVariable("mode") Integer mode, HttpServletRequest request) {
         Integer userID = Check.getUserID(request);
-        List<Meeting> meetings = meetingService.findMeetingsByUserIdAndTime(userID,mode);
+        List<Meeting> meetings = meetingService.findMeetingsByUserIdAndTime(userID, mode);
         HashMap hashMap = new HashMap();
         hashMap.put("meetings", meetings);
         return ResultBean.success(hashMap);
     }
 
     //与我有关会议1
-    @ApiOperation(value = "根据id得到和我有关的会议",notes = "参数： <br>1、userid  我的id  " +
+    @ApiOperation(value = "根据id得到和我有关的会议", notes = "参数： <br>1、userid  我的id  " +
             " <br>2、登陆token  ")
 //    @UserLoginToken
     @ResponseBody
@@ -267,33 +268,34 @@ public class MeetingController {
 
     //    动态查询会议 类型 地点 时间1
 
-    @ApiOperation(value = "根据条件查询会议",notes = "参数： <br>1、 type 会议类型 如 1 (科研)  " +
+    @ApiOperation(value = "根据条件查询会议", notes = "参数： <br>1、 type 会议类型 如 1 (科研)  " +
             " <br>2、location 会议地点 如逸夫楼 <br>3、date 会议日期 格式 yyyy-MM-dd  如2019-11-25 ")
     @ResponseBody
     @RequestMapping(path = "/meetings/dy", method = RequestMethod.GET)
     public ResultBean findMeetingsDy(@Nullable Integer type, @Nullable String location,
                                      @Nullable Date beginTime, @Nullable Date endTime, @Nullable String name) {
 //        int meetingsType = meetingService.findMeetingsType(type);
-        List<Meeting> meetings = meetingService.findMeetingsDy(type, location, endTime,beginTime, name);
+        List<Meeting> meetings = meetingService.findMeetingsDy(type, location, endTime, beginTime, name);
         HashMap hashMap = new HashMap();
         hashMap.put("meetings", meetings);
         return ResultBean.success(hashMap);
     }
+
     @ApiOperation(value = "返回热门会议数据")
     @ResponseBody
     @GetMapping("/meetings/hot")
-    public ResultBean HotMeeting(){
-        List<Meeting> meetings=meetingService.findMeetings(0,10);
-        Map map=new HashMap();
-        map.put("hot meetings",meetings);
+    public ResultBean HotMeeting() {
+        List<Meeting> meetings = meetingService.findMeetings(0, 10);
+        Map map = new HashMap();
+        map.put("hot meetings", meetings);
         return ResultBean.success(map);
     }
 
-    @ApiOperation(value="返回会议分类的分页会议数据")
+    @ApiOperation(value = "返回会议分类的分页会议数据")
     @ResponseBody
     @GetMapping("/meetings/{typeid}")
-    public ResultBean findMeetingByTypeId(@PathVariable("typeid") Integer typeid){
-        List<Meeting> meetings=meetingService.findMeetingByTypeId(typeid);
+    public ResultBean findMeetingByTypeId(@PathVariable("typeid") Integer typeid) {
+        List<Meeting> meetings = meetingService.findMeetingByTypeId(typeid);
         return ResultBean.success(meetings);
     }
 //    @ApiOperation(value="返回会议分页的文艺会议数据")

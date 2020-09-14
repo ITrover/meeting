@@ -35,7 +35,15 @@ spring:
   profiles:
     active: pro
 debug: true
-
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    root: info
+    meeting.meetingv1: info
+  file:
+    name: log/meeting.log
 ---
 # 正式发布,使用学校的服务器
 spring:

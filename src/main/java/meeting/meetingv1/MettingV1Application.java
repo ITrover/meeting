@@ -11,7 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @MapperScan(value = "meeting.meetingv1.mapper")
 @SpringBootApplication
-@EnableCaching
+//@EnableCaching
 @EnableSwagger2
 public class MettingV1Application  extends SpringBootServletInitializer {
 
