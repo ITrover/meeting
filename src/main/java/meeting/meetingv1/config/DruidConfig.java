@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+
+/**
+ * @auther NMID
+ */
 public class DruidConfig {
 
     @ConfigurationProperties(prefix = "spring.datasource")

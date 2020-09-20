@@ -1,13 +1,24 @@
 package meeting.meetingv1.util;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ApiModel("api接口通用返回对象")
 public class ResultBean {
+
+    @ApiModelProperty(value = "状态码",dataType = "Integer")
     private int code;
+
+    @ApiModelProperty(value="响应信息",dataType = "String")
     private String message;
+
+    @ApiModelProperty(value = "数据", dataType = "Map")
     private Map data;
 
     private ResultBean() {
