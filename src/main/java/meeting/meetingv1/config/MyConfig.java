@@ -9,6 +9,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+/**
+ * @auther NMID
+ */
 public class MyConfig implements WebMvcConfigurer {
     @Autowired
     private AuthenticationInterceptor myInterceptor;

@@ -2,6 +2,8 @@ package meeting.meetingv1.controller;
 
 import com.google.zxing.WriterException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.exception.IncorrectCredentialsException;
@@ -36,6 +38,19 @@ public class SignInController {
     UserMeetingService userMeetingService;
 
     //创建或更新
+
+    /**
+     *
+     * @param meetingId
+     * @param signInStartTime
+     * @param request
+     * @return
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "signInstartTime",value="签到开始时间",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "meetingId",value="会议号",required = true,dataType = "Integer"),
+            @ApiImplicitParam(name = "request",value="请求头封装对象",dataType = "HttpServletRequest")
+    })
     @PostMapping("/addSignIn")
     @UserLoginToken
     @ResponseBody
@@ -59,11 +74,25 @@ public class SignInController {
     }
     //获取会议签到码
 //    @UserLoginToken
+
+    /**
+     *
+     * @param request
+     * @param response
+     * @param meetingId
+     * @throws IOException
+     * @throws WriterException
+     */
     @GetMapping("/getSignPic/{meetingId}")
     @ApiOperation(value = "签到获取二维码",notes =
             "二维码直接跳转到静态页面，携带参量信息包括meetingId、code(随机参数，在签到事件创建或更新时生成，意味着每次更新信息后之前的二维码将失效)" +
                     "参数：会议Id（路径变量），请求头touken字段"
     )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "response",value="响应头封装对象",required = true,dataType = "HttpServletResponse"),
+            @ApiImplicitParam(name = "meetingId",value="会议号",required = true,dataType = "Integer"),
+            @ApiImplicitParam(name = "request",value="请求头封装对象",dataType = "HttpServletRequest")
+    })
     public void getSignPic(HttpServletRequest request, HttpServletResponse response,@PathVariable Integer meetingId) throws IOException, WriterException {
 //        if (!Check.checkUp(request,userMeetingService,meetingId)){
 //            return;
@@ -71,6 +100,10 @@ public class SignInController {
         ServletOutputStream outputStream = response.getOutputStream();
         signInService.getSignPic(outputStream,meetingId);
     }
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "meetingId",value="会议号",required = true,dataType = "Integer"),
+            @ApiImplicitParam(name = "request",value="请求头封装对象",dataType = "HttpServletRequest")
+    })
     @GetMapping("/statisticSignInInfo")
     @UserLoginToken
     @ResponseBody
@@ -92,11 +125,28 @@ public class SignInController {
     @Autowired
     UserService userService;
     //成员签到
+
+    /**
+     *
+     * @param meetingId
+     * @param code
+     * @param key
+     * @param password
+     * @return
+     * @throws IncorrectCredentialsException
+     * @throws UnknownAccountException
+     */
     @PostMapping("sign/{meetingId}/{code}")
     @ResponseBody
     @ApiOperation(value = "参会成员签到",notes =
-            "参数：会议Id（meetingId，路径变量），随机参数（code，路径变量），登陆key，密码password"
+            "参数：会议Id（meetingId，路径变量），随机参数（code，路径变量），登陆key，密码password",response = ResultBean.class
     )
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code",value="路径变量",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "meetingId",value="会议号",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "password",value="密码",dataType = "String"),
+            @ApiImplicitParam(name=  "key",value="登录key",dataType ="String" )
+    })
     public ResultBean signIn(
             @PathVariable Integer meetingId,
             @PathVariable String code
@@ -109,9 +159,19 @@ public class SignInController {
         return ResultBean.success();
     }
 
+    /**
+     *
+     * @param meetingId
+     * @param code
+     * @return
+     */
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code",value="路径变量",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "meetingId",value="会议号",required = true,dataType = "Integer")
+    })
     @GetMapping("goSignPage")
     @ApiOperation(value = "二维码中请求的路径",notes =
-            "这个接口仅为扫描二维码时跳转到指定页面，其中包含的参数将传递到静态页面中，参数的传递将使用模板引擎操作"
+            "这个接口仅为扫描二维码时跳转到指定页面，其中包含的参数将传递到静态页面中，参数的传递将使用模板引擎操作",response = ModelAndView.class
     )
     public ModelAndView signPage(
             Integer meetingId,
