@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import meeting.meetingv1.annotation.UserLoginToken;
 import meeting.meetingv1.pojo.UserMeeting;
 import meeting.meetingv1.pojo.Voluntask;
@@ -26,19 +27,32 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 会议志愿工作接口
+ * @author NMID
+ */
 @RestController
 @Api(tags = "会议志愿工作接口")
 public class VoluntTaskController {
-    @Autowired
+    final
     ObjectMapper objectMapper;
-    @Autowired
+    final
     VoTaskService voTaskService;
-    @Autowired
+    final
     VoUserTaskInfoService voUserTaskInfoService;
-    @Autowired
+    final
     UserMeetingService userMeetingService;
-    @Autowired
+    final
     VoluntEventService voluntEventService;
+
+    public VoluntTaskController(ObjectMapper objectMapper, VoTaskService voTaskService, VoUserTaskInfoService voUserTaskInfoService, UserMeetingService userMeetingService, VoluntEventService voluntEventService) {
+        this.objectMapper = objectMapper;
+        this.voTaskService = voTaskService;
+        this.voUserTaskInfoService = voUserTaskInfoService;
+        this.userMeetingService = userMeetingService;
+        this.voluntEventService = voluntEventService;
+    }
+
     @GetMapping("tasks/my/all")
     @ApiOperation(value = "获取用户申请的的志愿工作详情" ,notes = "" +
             "<br>参数：1. 登陆token" +
@@ -46,7 +60,8 @@ public class VoluntTaskController {
             "[{\"typeFlag\":4,\"voluntinfo\":{\"userid\":17,\"meetingid\":21,\"taskid\":2,\"studentid\":\"2017210403\",\"personid\":\"5222661998\"},\"myTask\":{\"taskid\":2,\"meetid\":21,\"taskinfo\":\"测试是的 的的的的\",\"workingtime\":8,\"numbers\":2}}," +
             "<br>{\"typeFlag\":4,\"voluntinfo\":{\"userid\":17,\"meetingid\":24,\"taskid\":8,\"studentid\":\"123123\",\"personid\":\"500226218651\"},\"myTask\":{\"taskid\":8,\"meetid\":24,\"taskinfo\":\"机场迎接嘉宾\",\"workingtime\":8,\"numbers\":2}}]")
     @UserLoginToken
-    public ResultBean getVoTasks(HttpServletRequest request){
+    public ResultBean getVoTasks(
+            @ApiParam(name = "request", value = "登陆token") HttpServletRequest request){
         List<UserMeeting> userMeetingInfo = userMeetingService.findUserMeetingInfo(Check.getUserID(request));
 
         Map<String,List> map = new HashMap<>();
@@ -63,7 +78,9 @@ public class VoluntTaskController {
             notes = "参数：<br>1. meetingId"
     )
     @UserLoginToken
-    public ResultBean getVoTasksByUer(Integer meetingId, HttpServletRequest request){
+    public ResultBean getVoTasksByUer(
+            @ApiParam(name = "meetingId", value = "会议Id") Integer meetingId,
+            @ApiParam(name = "request", value = "登陆token") HttpServletRequest request){
         Integer userId = Check.getUserID(request);
         Map<String,List> map = new HashMap<>();
         map.put("tasks",voUserTaskInfoService.getMyTaskInfo(userId));
@@ -73,9 +90,9 @@ public class VoluntTaskController {
     @ApiOperation(value = "",
             notes = "参数：<br>1. meetingId"
     )
-//    @UserLoginToken
-    public ResultBean getAllTasks(@PathVariable Integer meetingId, HttpServletRequest request){
-//        Integer userId = Check.getUserID(request);
+    public ResultBean getAllTasks(
+            @ApiParam(name = "meetingId", value = "会议Id") @PathVariable Integer meetingId,
+            @ApiParam(name = "request", value = "登陆token") HttpServletRequest request){
         Map<String,List> map = new HashMap<>();
         map.put("tasks",voUserTaskInfoService.getVoInfoByMeet(meetingId));
         return ResultBean.success(map);
@@ -85,7 +102,10 @@ public class VoluntTaskController {
             notes = "参数：<br>1. meetingId"
     )
     @UserLoginToken
-    public ResultBean addTasks(@PathVariable Integer meetingId, HttpServletRequest request,String taskjson) throws UnsupportedEncodingException, JsonProcessingException {
+    public ResultBean addTasks(
+            @ApiParam(name = "meetingId", value = "会议Id") @PathVariable Integer meetingId,
+            @ApiParam(name = "request", value = "登陆token") HttpServletRequest request,
+            @ApiParam(name = "taskjson", value = "json") String taskjson) throws UnsupportedEncodingException, JsonProcessingException {
         if (!Check.checkUp(request,userMeetingService,meetingId)){
             return ResultBean.error(-12,"无权限");
         }
