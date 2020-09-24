@@ -1,5 +1,7 @@
 package meeting.meetingv1.pojo;
 
+import java.util.Objects;
+
 public class Driver extends DriverKey {
     /**
      *
@@ -189,5 +191,22 @@ public class Driver extends DriverKey {
      */
     public void setIsArrenge(Integer isArrenge) {
         this.isArrenge = isArrenge;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Driver driver = (Driver) o;
+        return Objects.equals(carId, driver.carId) &&
+                Objects.equals(driverName, driver.driverName) &&
+                Objects.equals(driverTel, driver.driverTel) &&
+                Objects.equals(carType, driver.carType) &&
+                Objects.equals(isArrenge, driver.isArrenge);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carId, driverName, driverTel, carType, isArrenge);
     }
 }
