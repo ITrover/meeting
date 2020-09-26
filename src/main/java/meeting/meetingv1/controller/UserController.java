@@ -46,14 +46,13 @@ public class UserController {
     MeetingService meetingService;
 
     @Autowired
-    public UserController(UserService userService, SmsService smsService, VerificationCodeService codeService, MailService mailService, JsonUtil jsonUtil, MeetingService meetingService, Logger log) {
+    public UserController(UserService userService, SmsService smsService, VerificationCodeService codeService, MailService mailService, JsonUtil jsonUtil, MeetingService meetingService) {
         this.userService = userService;
         this.smsService = smsService;
         this.codeService = codeService;
         this.mailService = mailService;
         this.jsonUtil = jsonUtil;
         this.meetingService = meetingService;
-        this.log = log;
     }
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
